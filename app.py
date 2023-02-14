@@ -20,6 +20,10 @@ def change_scaling_event(new_scaling: str):
     customtkinter.set_widget_scaling(new_scaling_float)
 
 
+def test_event(option: str):
+    print(option)
+
+
 def sidebar_button_event():
     print("sidebar_button click")
 
@@ -43,21 +47,21 @@ class App(customtkinter.CTk):
         # create sidebar frame with widgets
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+
+        # Rows Config for sidebar_frame
+        self.sidebar_frame.grid_rowconfigure(5, weight=1)
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="CustomTkinter", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        # Sidebar buttons
-        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, command=sidebar_button_event)
-        self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
-        self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame, command=sidebar_button_event)
-        self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame, command=sidebar_button_event)
-        self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=10)
-        self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, command=sidebar_button_event)
-        self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=10)
-
-
+        # Sidebar OptionMenu
+        self.sidebar_option_1 = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_1.grid(row=1, column=0, padx=20, pady=10)
+        self.sidebar_option_2 = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_2.grid(row=2, column=0, padx=20, pady=10)
+        self.sidebar_option_3 = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_3.grid(row=3, column=0, padx=20, pady=10)
+        self.sidebar_option_4 = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_4.grid(row=4, column=0, padx=20, pady=10)
 
         # self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         # self.appearance_mode_label.grid(row=5, column=0, padx=20, pady=(10, 0))
