@@ -47,11 +47,7 @@ class App(customtkinter.CTk):
 
         # @description: configure grid layout (4 rows, 2 columns) with 30% for sidebar and 70% for content camera
         self.grid_columnconfigure(1, weight=1)
-        for i in (2, 3):
-            self.grid_columnconfigure(i, weight=0)
-
-        for i in (0, 1, 2):
-            self.grid_rowconfigure(i, weight=1)
+        self.grid_rowconfigure(1, weight=1)
 
         # @description: Sidebar frame with widgets
         self.sidebar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="#d1d5db")
@@ -104,6 +100,8 @@ class App(customtkinter.CTk):
         # @description: Canvas for the camera image
         self.camera_canvas = customtkinter.CTkCanvas(self.main_frame, width=1050, height=730, relief="flat")
         self.camera_canvas.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+
+        # @description: Camera VideoCapture
 
         # @description: 4 Buttons for the camera in the main frame (bottom center and aligned to the bottom)
         self.camera_button_1 = customtkinter.CTkButton(self.main_frame, text="Button 1",
