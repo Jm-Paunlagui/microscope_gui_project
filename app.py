@@ -93,7 +93,7 @@ class App(customtkinter.CTk):
         self.sidebar_combobox_1.grid(row=9, column=0, padx=20, pady=10)
 
         # Main Frame with widgets (content camera with 4 buttons)
-        self.main_frame = customtkinter.CTkFrame(self, corner_radius=10, fg_color="white")
+        self.main_frame = customtkinter.CTkFrame(self, corner_radius=10, fg_color="#f8fafc")
         self.main_frame.grid(row=0, column=1, rowspan=3, sticky="nsew", padx=10, pady=10)
 
 
