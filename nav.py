@@ -1,5 +1,6 @@
 import customtkinter
 import customtkinter as ctk
+customtkinter.set_appearance_mode("Light")
 
 
 class NavigationBar(ctk.CTkFrame):
@@ -37,10 +38,10 @@ class NavigationBar(ctk.CTkFrame):
 
     def toggle_menu(self):
         if self.menu_visible:
-            self.menu_frame.place(x=-900, y=self.app_title.winfo_height())  # Place menu offscreen
+            self.menu_frame.place(x=-900, y=-100)  # Place menu offscreen
             self.menu_visible = False
         else:
-            self.menu_frame.place(x=0, y=self.app_title.winfo_height())  # Place menu below app title
+            self.menu_frame.place(x=0, y=-100)  # Place menu below app title
             self.menu_visible = True
             self.menu_frame.lift()  # Bring menu to front
 
