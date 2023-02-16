@@ -39,8 +39,7 @@ class App(customtkinter.CTk):
         self.geometry(f"{1280}x{832}")
 
         # @description: min and max size of window
-        self.minsize(1280, 832)
-        self.maxsize(1280, 832)
+        # self.minsize(1280, 832)
 
         # @description: Window background color gray
         self.configure(fg_color="#d1d5db")
@@ -65,7 +64,7 @@ class App(customtkinter.CTk):
         # self.right_side_bar_frame.pack(side=customtkinter.RIGHT)
 
         # @description: Content frame with widgets (camera, ...)
-        self.content_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="#d1d5db")
+        self.content_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
         self.content_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.YES)
 
         # @description: Bottom Bar frame with widgets (status bar, ...)
@@ -84,6 +83,15 @@ class App(customtkinter.CTk):
         self.top_bar_title = customtkinter.CTkLabel(self.top_bar_frame, text="App title", fg_color="#d1d5db",
                                                     bg_color="black", font=("Helvetica", 20))
         self.top_bar_title.pack(side=customtkinter.LEFT, padx=0, pady=14)
+
+        # @description: Main Frame for the camera with 4 buttons
+        # self.main_frame = customtkinter.CTkFrame(self, corner_radius=10, fg_color="#f8fafc")
+        # self.main_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", padx=10, pady=10)
+        #
+        # # @description: Canvas for the camera image
+        self.camera_canvas = customtkinter.CTkCanvas(self.content_frame, width=self.winfo_y(),
+                                                     height=self.winfo_x(), relief="flat")
+        self.camera_canvas.grid(row=0, column=0, columnspan=4, padx=2, pady=2, sticky="nsew")
 
 
 if __name__ == "__main__":
