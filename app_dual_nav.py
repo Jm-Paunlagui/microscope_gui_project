@@ -74,16 +74,16 @@ class App(customtkinter.CTk):
 
         # @description: Top Bar frame with widgets (hambuger menu, title, settings, ...)
         self.micro_menu_button = customtkinter.CTkButton(self.top_bar_frame, width=18, image=bars, text="",
-                                                         fg_color="#d1d5db", bg_color="#d1d5db")
-        self.micro_menu_button.pack(side=customtkinter.LEFT, padx=24, pady=24)
+                                                         fg_color="#d1d5db", bg_color="#d1d5db", hover_color="#d1d5db")
+        self.micro_menu_button.pack(side=customtkinter.LEFT, padx=14, pady=14)
 
         self.cam_menu_button = customtkinter.CTkButton(self.top_bar_frame, width=18, image=bars, text="",
-                                                       fg_color="#d1d5db", bg_color="#d1d5db")
-        self.cam_menu_button.pack(side=customtkinter.RIGHT, padx=24, pady=24)
+                                                       fg_color="#d1d5db", bg_color="#d1d5db", hover_color="#d1d5db")
+        self.cam_menu_button.pack(side=customtkinter.RIGHT, padx=14, pady=14)
 
         self.top_bar_title = customtkinter.CTkLabel(self.top_bar_frame, text="App title", fg_color="#d1d5db",
                                                     bg_color="black", font=("Helvetica", 20))
-        self.top_bar_title.pack(side=customtkinter.LEFT, padx=0, pady=24)
+        self.top_bar_title.pack(side=customtkinter.LEFT, padx=0, pady=14)
 
 
 if __name__ == "__main__":
