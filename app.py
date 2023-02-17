@@ -103,7 +103,7 @@ class App(customtkinter.CTk):
                                                    text_color="#3b82f6")
         self.status_label.place(relx=0.5, rely=0.99, anchor="s")
 
-        # @description: Main Frame for the camera with 4 buttons
+        # @description: Main Frame for the camera
         self.main_frame = customtkinter.CTkFrame(self, corner_radius=10, fg_color="#f8fafc")
         self.main_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", padx=10, pady=10)
 
