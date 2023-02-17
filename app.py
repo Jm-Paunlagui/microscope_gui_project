@@ -1,8 +1,6 @@
-import tkinter
-import tkinter.messagebox
 import customtkinter
 import cv2
-from PIL import Image, ImageTk
+from PIL import ImageTk, Image
 
 customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -100,9 +98,10 @@ class App(customtkinter.CTk):
                                                        command=sidebar_button_event)
         self.camera_button_4.grid(row=11, column=0, padx=0, pady=10, sticky="s")
 
-        self.status_label = customtkinter.CTkLabel(self.sidebar_frame, text="Status: Connected",
-                                                   font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.status_label.place(relx=0.5, rely=1, anchor="s")
+        self.status_label = customtkinter.CTkLabel(self.sidebar_frame, text="Status",
+                                                   fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8,
+                                                   text_color="#3b82f6")
+        self.status_label.place(relx=0.5, rely=0.99, anchor="s")
 
         # @description: Main Frame for the camera with 4 buttons
         self.main_frame = customtkinter.CTkFrame(self, corner_radius=10, fg_color="#f8fafc")
