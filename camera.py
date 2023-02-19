@@ -1,58 +1,49 @@
-import tkinter as tk  # PEP8: `import *` is not preferred
-from PIL import Image, ImageTk
 import cv2
+import customtkinter
 
 
-# --- functions ---
+class App(customtkinter.CTk):
+    def __init__(self):
+        # Create main window
+        self.window = customtkinter.CTk()
+        self.window.geometry("640x480")
+        self.window.resizable(False, False)
+        self.window.title("Video Capture")
 
-def show_frame():
-    global image_id  # inform function to assign new value to global variable instead of local variable
+        # Create main frame
+        self.main_frame = customtkinter.CTkFrame(self.window)
+        self.main_frame.pack()
 
-    # get frame
-    ret, frame = cap.read()
+        # Create canvas widget to display video
+        self.canvas = customtkinter.CTkCanvas(self.main_frame, width=640, height=480)
+        self.canvas.pack()
 
-    if ret:
-        # cv2 uses `BGR` but `GUI` needs `RGB
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # Create video capture object
+        self.video_capture = cv2.VideoCapture(0)
 
-        # convert to PIL image
-        img = Image.fromarray(frame)
+        # Start video capture loop
+        self.update_video()
 
-        # convert to Tkinter image
-        photo = ImageTk.PhotoImage(image=img)
+        # Start main loop
+        self.window.mainloop()
 
-        # solution for bug in `PhotoImage`
-        canvas.photo = photo
+    def update_video(self):
+        # Read frame from video capture
+        ret, frame = self.video_capture.read()
 
-        # check if image already exists
-        if image_id:
-            # replace image in PhotoImage on canvas
-            canvas.itemconfig(image_id, image=photo)
-        else:
-            # create first image on canvas and keep its ID
-            image_id = canvas.create_image((0, 0), image=photo, anchor='nw')
-            # resize canvas
-            canvas.configure(width=photo.width(), height=photo.height())
+        if ret:
+            # Convert frame to image
+            img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img = customtkinter.CTkImage.fromarray(img)
 
-    # run again after 20ms (0.02s)
-    root.after(20, show_frame)
+            # Update image in canvas
+            self.canvas.delete("all")
+            self.canvas.create_image(0, 0, anchor="nw", image=img)
+
+        # Schedule next update
+        self.window.after(10, self.update_video)
 
 
-# --- main ---
-
-image_id = None  # default value at start (to create global variable)
-
-cap = cv2.VideoCapture(0)
-
-root = tk.Tk()
-
-# create a Label to display frames
-canvas = tk.Canvas(root)
-canvas.pack(fill='both', expand=True)
-
-# start function which shows frame
-show_frame()
-
-root.mainloop()
-
-cap.release()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
