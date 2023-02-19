@@ -1,3 +1,4 @@
+import time
 import tkinter
 import tkinter.messagebox
 import customtkinter
@@ -30,6 +31,24 @@ def sidebar_button_event():
     print("sidebar_button click")
 
 
+def toggle_sidebar_event():
+    if app.left_side_bar_frame.winfo_ismapped():
+        # @description: Animation for sidebar
+        for i in range(0, 15):
+            app.left_side_bar_frame.grid_rowconfigure(i, weight=0)
+            time.sleep(0.01)
+            app.update()
+        app.left_side_bar_frame.pack_forget()
+    else:
+        app.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
+        app.left_side_bar_frame.grid_rowconfigure(15, weight=1)
+        # @description: Animation for sidebar
+        for i in range(0, 15):
+            app.left_side_bar_frame.grid_rowconfigure(i, weight=1)
+            time.sleep(0.01)
+            app.update()
+
+
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -55,22 +74,66 @@ class App(customtkinter.CTk):
             size=(24, 24)
         )
 
-        # # @description: Left Side Bar frame with widgets (hambuger menu, title...)
-        # self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="green")
-        # self.left_side_bar_frame.pack(side=customtkinter.LEFT)
-        #
-        # # @description: Right Side Bar frame with widgets (hambuger menu only)
-        # self.right_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="yellow")
-        # self.right_side_bar_frame.pack(side=customtkinter.RIGHT)
+        # @description: Left Side Bar frame with widgets (hambuger menu, title...)
+        self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
+        self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
+
+        # @description: Rows Config for sidebar_frame
+        self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
+
+        # @description: Sidebar OptionMenu
+        self.label_options = customtkinter.CTkLabel(self.left_side_bar_frame, text="Microscope Options",
+                                                    font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.label_options.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.sidebar_option_1 = customtkinter.CTkOptionMenu(
+            self.left_side_bar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_1.grid(row=1, column=0, padx=0, pady=10)
+        self.sidebar_option_2 = customtkinter.CTkOptionMenu(
+            self.left_side_bar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_2.grid(row=2, column=0, padx=0, pady=10)
+        self.sidebar_option_3 = customtkinter.CTkOptionMenu(
+            self.left_side_bar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_3.grid(row=3, column=0, padx=0, pady=10)
+        self.sidebar_option_4 = customtkinter.CTkOptionMenu(
+            self.left_side_bar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_option_4.grid(row=4, column=0, padx=0, pady=10)
+
+        self.sidebar_segmented_button_1 = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
+                                                                           values=["Button 1", "Button 2"],
+                                                                           command=test_event)
+        self.sidebar_segmented_button_1.grid(row=5, column=0, padx=0, pady=10)
+        self.sidebar_segmented_button_1.set("Button 1")
+
+        # @description: Combobox with values
+        self.sidebar_combobox_1 = customtkinter.CTkOptionMenu(
+            self.left_side_bar_frame, values=["Option 1", "Option 2", "Option 3"], command=test_event)
+        self.sidebar_combobox_1.grid(row=6, column=0, padx=0, pady=10)
+
+        # @description: Camera buttons
+        self.label_options_3 = customtkinter.CTkLabel(self.left_side_bar_frame, text="Camera Options",
+                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.label_options_3.grid(row=7, column=0, padx=0, pady=10)
+        self.camera_button_1 = customtkinter.CTkButton(self.left_side_bar_frame, text="Button 1",
+                                                       command=sidebar_button_event)
+        self.camera_button_1.grid(row=8, column=0, padx=0, pady=10, sticky="s")
+        self.camera_button_2 = customtkinter.CTkButton(self.left_side_bar_frame, text="Button 2",
+                                                       command=sidebar_button_event)
+        self.camera_button_2.grid(row=9, column=0, padx=0, pady=10, sticky="s")
+        self.camera_button_3 = customtkinter.CTkButton(self.left_side_bar_frame, text="Button 3",
+                                                       command=sidebar_button_event)
+        self.camera_button_3.grid(row=10, column=0, padx=0, pady=10, sticky="s")
+        self.camera_button_4 = customtkinter.CTkButton(self.left_side_bar_frame, text="Button 4",
+                                                       command=sidebar_button_event)
+        self.camera_button_4.grid(row=11, column=0, padx=0, pady=10, sticky="s")
 
         # @description: Content frame with widgets (camera, ...)
-        self.content_frame = customtkinter.CTkFrame(self)
-        self.content_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.YES)
+        self.content_frame = customtkinter.CTkFrame(self, )
+        self.content_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.YES, side=customtkinter.RIGHT)
 
         # @description: Top Bar frame with widgets (hambuger menu, title, settings, ...)
         self.menu_button = customtkinter.CTkButton(self.top_bar_frame, width=18, image=bars, text="",
                                                    fg_color="white", corner_radius=8, hover_color="white",
-                                                   text_color="white")
+                                                   text_color="white", command=toggle_sidebar_event)
         self.menu_button.pack(side=customtkinter.LEFT, padx=14, pady=14)
 
         self.status_cam = customtkinter.CTkLabel(self.top_bar_frame, text="Status", fg_color="#bfdbfe",
@@ -81,14 +144,53 @@ class App(customtkinter.CTk):
                                                     font=("Helvetica", 20, "bold"), text_color="black")
         self.top_bar_title.pack(side=customtkinter.LEFT, padx=0, pady=14)
 
-        # @description: Main Frame for the camera with 4 buttons
-        # self.main_frame = customtkinter.CTkFrame(self, corner_radius=10, fg_color="#f8fafc")
-        # self.main_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", padx=10, pady=10)
-        #
-        # # @description: Canvas for the camera image
-        self.camera_canvas = customtkinter.CTkCanvas(self.content_frame, width=self.winfo_y(),
-                                                     height=self.winfo_x(), relief="flat")
-        self.camera_canvas.grid(row=0, column=0, columnspan=4, sticky="nsew")
+        # @description: Canvas for the camera image
+        self.camera_canvas = customtkinter.CTkCanvas(self.content_frame, width=self.content_frame.winfo_width(),
+                                                     height=self.content_frame.winfo_height())
+        self.camera_canvas.pack(fill="both", expand=True)
+
+        self.camera_canvas.update()
+        # @description: Camera VideoCapture
+        # VideoCapture here:
+        self.cap = cv2.VideoCapture(0)
+
+        # Set the time limit to 30 seconds
+        self.time_limit = 30
+
+        # Initialize the last frame time and the hover flag
+        self.last_frame_time = time.time()
+
+        # @description: Camera image update function
+        def update_image():
+            ret, frame = self.cap.read()
+            if ret:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                width = self.camera_canvas.winfo_width()
+                height = self.camera_canvas.winfo_height()
+                if width > 1 and height > 1:
+                    frame = cv2.resize(frame, (width, height))
+                    frame = cv2.flip(frame, 1)
+                    frame = Image.fromarray(frame)
+                    frame = ImageTk.PhotoImage(frame)
+                    self.camera_canvas.create_image(0, 0, image=frame, anchor="nw")
+                    self.camera_canvas.image = frame
+            else:
+                inactive_camera()
+            self.camera_canvas.after(1, update_image)
+
+        def inactive_camera():
+            self.cap.release()
+            self.camera_canvas.destroy()
+            self.camera_canvas = customtkinter.CTkCanvas(self.content_frame, width=self.content_frame.winfo_width(),
+                                                         height=self.content_frame.winfo_height(), closeenough=1)
+            self.camera_canvas.pack(fill="both", expand=True)
+            self.inactive_camera_label = customtkinter.CTkLabel(self.camera_canvas, text="Camera not in use",
+                                                                font=customtkinter.CTkFont(size=20, weight="bold"))
+            self.inactive_camera_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        # @description: Update the image
+        # update_image()
+        inactive_camera()
 
 
 if __name__ == "__main__":
