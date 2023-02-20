@@ -55,13 +55,13 @@ class App(customtkinter.CTk):
             size=(24, 24)
         )
 
-        # # @description: Left Side Bar frame with widgets (hambuger menu, title...)
-        # self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="green")
-        # self.left_side_bar_frame.pack(side=customtkinter.LEFT)
-        #
-        # # @description: Right Side Bar frame with widgets (hambuger menu only)
-        # self.right_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="yellow")
-        # self.right_side_bar_frame.pack(side=customtkinter.RIGHT)
+        # @description: Left Side Bar frame with widgets (hambuger menu, title...)
+        self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="green")
+        self.left_side_bar_frame.pack(side=customtkinter.LEFT)
+
+        # @description: Right Side Bar frame with widgets (hambuger menu only)
+        self.right_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="yellow")
+        self.right_side_bar_frame.pack(side=customtkinter.RIGHT)
 
         # @description: Content frame with widgets (camera, ...)
         self.content_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
