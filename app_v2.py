@@ -67,6 +67,9 @@ class App(customtkinter.CTk):
         self.top_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=50)
         self.top_bar_frame.pack(fill=customtkinter.X, side=customtkinter.TOP)
 
+        self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=50)
+        self.status_bar_frame.pack(fill=customtkinter.X, side=customtkinter.BOTTOM)
+
         # @description: Menu icon
         bars = customtkinter.CTkImage(
             light_image=Image.open("assets/icons/bars.png"),
@@ -136,9 +139,10 @@ class App(customtkinter.CTk):
                                                    text_color="white", command=toggle_sidebar_event)
         self.menu_button.pack(side=customtkinter.LEFT, padx=14, pady=14)
 
-        self.status_cam = customtkinter.CTkLabel(self.top_bar_frame, text="Status", fg_color="#bfdbfe",
+        # @description: Camera status label
+        self.status_cam = customtkinter.CTkLabel(self.status_bar_frame, text="Camera Status", fg_color="#bfdbfe",
                                                  font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6")
-        self.status_cam.pack(side=customtkinter.RIGHT, padx=14, pady=14)
+        self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
 
         self.top_bar_title = customtkinter.CTkLabel(self.top_bar_frame, text="App title",
                                                     font=("Helvetica", 20, "bold"), text_color="black")
