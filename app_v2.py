@@ -56,19 +56,16 @@ def sidebar_button_event4():
 def toggle_sidebar_event():
     if app.left_side_bar_frame.winfo_ismapped():
         # @description: Animation for sidebar
-        for i in range(0, 15):
-            app.left_side_bar_frame.grid_rowconfigure(i, weight=0)
-            time.sleep(0.01)
-            app.update()
+        app.left_side_bar_frame.grid_rowconfigure(i, weight=0)
+        time.sleep(0.01)
+        app.update()
         app.left_side_bar_frame.pack_forget()
     else:
         app.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
         app.left_side_bar_frame.grid_rowconfigure(15, weight=1)
-        # @description: Animation for sidebar
-        for i in range(0, 15):
-            app.left_side_bar_frame.grid_rowconfigure(i, weight=1)
-            time.sleep(0.01)
-            app.update()
+        app.left_side_bar_frame.grid_rowconfigure(i, weight=1)
+        time.sleep(0.01)
+        app.update()
 
 
 class App(customtkinter.CTk):
