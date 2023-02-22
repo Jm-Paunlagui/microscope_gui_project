@@ -1,55 +1,68 @@
 import tkinter as tk
+import cv2
+from PIL import Image, ImageTk
 
 
-class MyApp(tk.Tk):
-    def __init__(self):
-        super().__init__()
+class CustomLayout(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.cap = cv2.VideoCapture(0)
+        self.main_content = tk.Frame(self.master, bg="white")
+        self.bottom_bar = tk.Frame(self.master, bg="gray", height=50)
+        self.right_bar = tk.Frame(self.master, bg="lightgray", width=200)
+        self.left_bar = tk.Frame(self.master, bg="lightgray", width=200)
+        self.top_bar = tk.Frame(self.master, bg="gray", height=50)
+        self.master = master
+        self.create_widgets()
 
-        # Create a sidebar frame
-        self.sidebar = tk.Frame(self, width=200, bg="gray")
-        self.sidebar.pack(side="left", fill="y")
+    def create_widgets(self):
+        # Create the top bar
+        self.top_bar.pack(side="top", fill="x")
 
-        # Create a content frame
-        self.content = tk.Frame(self, bg="white")
-        self.content.pack(side="right", fill="both", expand=True)
+        # Create the left side bar
+        self.left_bar.pack(side="left", fill="y")
 
-        # Bind the mouse enter and leave events to show and hide the sidebar
-        self.content.bind("<Enter>", self.show_sidebar)
-        self.content.bind("<Leave>", self.schedule_hide_sidebar)
+        # Create the right side bar
+        self.right_bar.pack(side="right", fill="y")
 
-        # Create a hamburger menu button
-        self.menu_button = tk.Button(self.content, text="☰", font=("Arial", 14), bg="white", bd=0,
-                                     command=self.toggle_sidebar)
-        self.menu_button.pack(side="left")
+        # Create the bottom bar
+        self.bottom_bar.pack(side="bottom", fill="x")
 
-        # Bind the Ctrl+P key to toggle the sidebar
-        self.bind("<Control-p>", self.toggle_sidebar)
+        # Create the main content area
+        self.main_content.pack(side="top", fill="both", expand=True)
 
-        # Set the delay time for hiding the sidebar on mouse leave
-        self.hide_delay = 300  # in milliseconds
+        # Add the video capture to the main content area
+        self.video_label = tk.Label(self.main_content)
+        self.video_label.pack(padx=20, pady=20)
+        self.update_video()
 
-    def toggle_sidebar(self, event=None):
-        # Check if the sidebar is currently visible
-        if self.sidebar.winfo_ismapped():
-            # Hide the sidebar
-            self.sidebar.pack_forget()
-        else:
-            # Show the sidebar
-            self.sidebar.pack(side="left", fill="y")
+    def update_video(self):
+        # Get a frame from the video capture
+        ret, frame = self.cap.read()
 
-    def show_sidebar(self, event):
-        # Show the sidebar
-        self.sidebar.pack(side="left", fill="y")
+        if ret:
+            # Convert the frame from BGR to RGB
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    def hide_sidebar(self):
-        # Hide the sidebar
-        self.sidebar.pack_forget()
+            # Resize the image to fit the label
+            image = cv2.resize(image, (640, 480))
 
-    def schedule_hide_sidebar(self, event):
-        # Use the after method to delay the execution of the hide_sidebar method
-        self.after(self.hide_delay, self.hide_sidebar)
+            # Convert the image to PIL format
+            image = Image.fromarray(image)
+
+            # Convert the image to Tkinter PhotoImage format
+            photo = ImageTk.PhotoImage(image)
+
+            # Update the label with the new image
+            self.video_label.configure(image=photo)
+            self.video_label.image = photo
+
+        # Schedule the next update in 1 millisecond
+        self.video_label.after(1, self.update_video)
 
 
 if __name__ == "__main__":
-    app = MyApp()
+    root = tk.Tk()
+    root.geometry("800x600")
+    app = CustomLayout(master=root)
     app.mainloop()

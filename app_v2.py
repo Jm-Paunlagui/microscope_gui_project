@@ -111,27 +111,44 @@ class App(customtkinter.CTk):
         self.label_options.grid(row=0, column=0, padx=20, pady=(20, 10))
         self.sidebar_option_1 = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.1", "Option 2.1", "Option 3.1"], command=test_event)
-        self.sidebar_option_1.grid(row=1, column=0, padx=0, pady=10)
+        self.sidebar_option_1.grid(row=1, column=1, padx=20, pady=10, sticky=customtkinter.W)
+        self.sidebar_option_1_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Objective",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.sidebar_option_1_label.grid(row=1, column=0, padx=20, pady=0, sticky=customtkinter.W)
         self.sidebar_option_2 = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.2", "Option 2.2", "Option 3.2"], command=test_event)
-        self.sidebar_option_2.grid(row=2, column=0, padx=0, pady=10)
+        self.sidebar_option_2.grid(row=2, column=1, padx=0, pady=10)
+        self.sidebar_option_2_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Condenser",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.sidebar_option_2_label.grid(row=2, column=0, padx=20, pady=0, sticky=customtkinter.W)
         self.sidebar_option_3 = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.3", "Option 2.3", "Option 3.3"], command=test_event)
-        self.sidebar_option_3.grid(row=3, column=0, padx=0, pady=10)
+        self.sidebar_option_3.grid(row=3, column=1, padx=0, pady=10)
+        self.sidebar_option_3_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Reflector",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.sidebar_option_3_label.grid(row=3, column=0, padx=20, pady=0, sticky=customtkinter.W)
         self.sidebar_option_4 = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.4", "Option 2.4", "Option 3.4"], command=test_event)
-        self.sidebar_option_4.grid(row=4, column=0, padx=0, pady=10)
-
-        self.sidebar_segmented_button_1 = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
-                                                                           values=["S-Button 1", "S-Button 2"],
-                                                                           command=test_event)
-        self.sidebar_segmented_button_1.grid(row=5, column=0, padx=0, pady=10)
-        self.sidebar_segmented_button_1.set("Button 1")
+        self.sidebar_option_4.grid(row=4, column=1, padx=0, pady=10)
+        self.sidebar_option_4_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Side Port",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.sidebar_option_4_label.grid(row=4, column=0, padx=20, pady=0, sticky=customtkinter.W)
 
         # @description: Combobox with values
         self.sidebar_combobox_1 = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.5", "Option 2.5", "Option 3.5"], command=test_event)
-        self.sidebar_combobox_1.grid(row=6, column=0, padx=0, pady=10)
+        self.sidebar_combobox_1.grid(row=5, column=1, padx=0, pady=10)
+        self.sidebar_option_5_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Tube Lens",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.sidebar_option_5_label.grid(row=5, column=0, padx=20, pady=0, sticky=customtkinter.W)
+
+        self.sidebar_segmented_button_1 = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
+                                                                           values=["S-Button 1", "S-Button 2"],
+                                                                           command=test_event)
+        self.sidebar_segmented_button_1.grid(row=6, column=1, padx=0, pady=10)
+        self.sidebar_option_6_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Shutter",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.sidebar_option_6_label.grid(row=6, column=0, padx=20, pady=0, sticky=customtkinter.W)
 
         # @description: Camera buttons
         self.label_options_3 = customtkinter.CTkLabel(self.left_side_bar_frame, text="Camera Options",
@@ -152,7 +169,7 @@ class App(customtkinter.CTk):
 
         # @description: Content frame with widgets (camera, ...)
         self.content_frame = customtkinter.CTkFrame(self, )
-        self.content_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.YES, side=customtkinter.RIGHT)
+        self.content_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.YES, side=customtkinter.TOP)
 
         # @description: Top Bar frame with widgets (hambuger menu, title, settings, ...)
         self.menu_button = customtkinter.CTkButton(self.top_bar_frame, width=18, image=bars, text="",
@@ -226,7 +243,6 @@ class App(customtkinter.CTk):
             self.left_side_bar_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.NO, side=customtkinter.LEFT)
 
     # description: Sidebar will appear either by mouse hover or by pressing the hamburger menu or by pressing Ctrl + P
-
 
 
 if __name__ == "__main__":

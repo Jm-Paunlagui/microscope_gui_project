@@ -18,7 +18,7 @@ class NavigationBar(ctk.CTkFrame):
 
         # Create the menu
         self.menu_frame = ctk.CTkFrame(self, bg_color="#EEE", height=800)
-        self.menu_frame.place(x=-900, y=self.app_title.winfo_height())  # Place menu offscreen
+        self.menu_frame.place(y=-900)
         self.menu_visible = False
 
         # Add some menu items
