@@ -50,8 +50,8 @@ class App(customtkinter.CTk):
 
         # @description: Menu icon
         bars = customtkinter.CTkImage(
-            light_image=Image.open("assets/icons/bars.png"),
-            dark_image=Image.open("assets/icons/bars.png"),
+            light_image=Image.open("../assets/icons/bars.png"),
+            dark_image=Image.open("../assets/icons/bars.png"),
             size=(24, 24)
         )
 
