@@ -5,7 +5,7 @@ import cv2
 from PIL import Image, ImageTk
 
 customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
 
 
 def test_event(option: str):
@@ -34,10 +34,14 @@ class FloatSpinbox(customtkinter.CTkFrame):
                  width: int = 150,
                  height: int = 32,
                  step_size: Union[int, float] = 1,
+                 min_value: Union[int, float] = None,
+                 max_value: Union[int, float] = None,
                  command: Callable = None,
                  **kwargs):
         super().__init__(*args, width=width, height=height, **kwargs)
 
+        self.min_value = min_value
+        self.max_value = max_value
         self.step_size = step_size
         self.command = command
 
@@ -45,14 +49,14 @@ class FloatSpinbox(customtkinter.CTkFrame):
 
         self.grid_columnconfigure(1, weight=1)  # entry expands
 
-        self.subtract_button = customtkinter.CTkButton(self, text="-", width=height-6, height=height-6,
+        self.subtract_button = customtkinter.CTkButton(self, text="-", width=height - 6, height=height - 6,
                                                        command=self.subtract_button_callback)
         self.subtract_button.grid(row=0, column=0, padx=(3, 0), pady=3)
 
-        self.entry = customtkinter.CTkEntry(self, width=width-(2*height), height=height-6, border_width=0)
+        self.entry = customtkinter.CTkEntry(self, width=width - (2 * height), height=height - 6, border_width=0)
         self.entry.grid(row=0, column=1, columnspan=1, padx=3, pady=3, sticky="ew")
 
-        self.add_button = customtkinter.CTkButton(self, text="+", width=height-6, height=height-6,
+        self.add_button = customtkinter.CTkButton(self, text="+", width=height - 6, height=height - 6,
                                                   command=self.add_button_callback)
         self.add_button.grid(row=0, column=2, padx=(0, 3), pady=3)
 
@@ -64,10 +68,14 @@ class FloatSpinbox(customtkinter.CTkFrame):
             self.command()
         try:
             value = float(self.entry.get()) + self.step_size
-            if value > 1400:
-                value = 1400
+            if value > self.max_value:
+                value = self.max_value
             self.entry.delete(0, "end")
             self.entry.insert(0, value if value >= 0 else 0)
+            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get()} - {app.fine_focus_options.get()}")
+            if app.condenser_diaphragm_options.get() is not None:
+                app.status_cam.configure(
+                    text=f"Condenser : {app.condenser_diaphragm_options.get()}")
         except ValueError:
             return
 
@@ -76,10 +84,14 @@ class FloatSpinbox(customtkinter.CTkFrame):
             self.command()
         try:
             value = float(self.entry.get()) - self.step_size
-            if value < 0:
-                value = 0
+            if value < self.min_value:
+                value = self.min_value
             self.entry.delete(0, "end")
-            self.entry.insert(0, value if value <= 1400 else 1400)
+            self.entry.insert(0, value if value <= self.max_value else self.max_value)
+            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get()} - {app.fine_focus_options.get()}")
+            if app.condenser_diaphragm_options.get() is not None:
+                app.status_cam.configure(
+                    text=f"Condenser : {app.condenser_diaphragm_options.get()}")
         except ValueError:
             return
 
@@ -128,8 +140,8 @@ class App(customtkinter.CTk):
         # @description: Initial state of the sidebar is hidden (pack_forget)
         self.left_side_bar_frame.pack_forget()
 
-        self.microscope_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Microscope Options",
-                                                                 font=customtkinter.CTkFont("Helvetica", 20))
+        self.microscope_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Microscope Functions",
+                                                                 font=customtkinter.CTkFont("Helvetica", 20, "bold"))
         self.microscope_functions_label.grid(row=0, column=0, sticky=customtkinter.W, padx=14, pady=14)
         self.objective_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Objective",
                                                       font=customtkinter.CTkFont(size=20))
@@ -152,6 +164,15 @@ class App(customtkinter.CTk):
         self.condenser_diaphragm_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Condenser Diaphragm",
                                                                 font=customtkinter.CTkFont(size=20))
         self.condenser_diaphragm_label.grid(row=7, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        self.z_drive_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Z Drive",
+                                                    font=customtkinter.CTkFont(size=20))
+        self.z_drive_label.grid(row=8, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        self.coarse_focus_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Coarse Focus",
+                                                         font=customtkinter.CTkFont(size=20))
+        self.coarse_focus_label.grid(row=9, column=0, padx=20, pady=0)
+        self.fine_focus_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Fine Focus",
+                                                       font=customtkinter.CTkFont(size=20))
+        self.fine_focus_label.grid(row=10, column=0, padx=20, pady=0)
 
         self.objective_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.1", "Option 2.1", "Option 3.1"], command=test_event)
@@ -172,9 +193,23 @@ class App(customtkinter.CTk):
                                                                 values=["S-Button 1", "S-Button 2"],
                                                                 command=test_event)
         self.shutter_options.grid(row=6, column=1, padx=0, pady=10)
-        self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, step_size=0.1,
-                                                        command=test_event)
+        self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, step_size=1, min_value=0.0,
+                                                        max_value=1400.0)
         self.condenser_diaphragm_options.grid(row=7, column=1, padx=0, pady=10)
+        self.condenser_diaphragm_options.set(700.0)
+        self.coarse_focus_options = FloatSpinbox(self.left_side_bar_frame, step_size=100, min_value=0.0,
+                                                 max_value=40000.0)
+        self.coarse_focus_options.grid(row=9, column=1, padx=0, pady=10)
+        self.coarse_focus_options.set(20000.0)
+        self.fine_focus_options = FloatSpinbox(self.left_side_bar_frame, step_size=1, min_value=0.0,
+                                               max_value=99)
+        self.fine_focus_options.grid(row=10, column=1, padx=0, pady=10)
+        self.fine_focus_options.set(50.0)
+        self.z_drive_config = customtkinter.CTkLabel(
+            self.left_side_bar_frame, text=f"{self.coarse_focus_options.get()} - {self.fine_focus_options.get()}",
+            fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8,
+            text_color="#3b82f6", )
+        self.z_drive_config.grid(row=8, column=1, padx=0, pady=10)
 
         self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=50)
         self.status_bar_frame.pack(fill=customtkinter.X, side=customtkinter.BOTTOM)
