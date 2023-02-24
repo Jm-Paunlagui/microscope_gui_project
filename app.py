@@ -31,8 +31,8 @@ def toggle_sidebar_event():
 
 class FloatSpinbox(customtkinter.CTkFrame):
     def __init__(self, *args,
-                 width: int = 150,
-                 height: int = 32,
+                 width: Union[int, float] = 100,
+                 height: Union[int, float] = 30,
                  step_size: Union[int, float] = 1,
                  min_value: Union[int, float] = None,
                  max_value: Union[int, float] = None,
@@ -118,7 +118,6 @@ class App(customtkinter.CTk):
         # @description: Menu icon
         bars = customtkinter.CTkImage(
             light_image=Image.open("assets/icons/bars.png"),
-            dark_image=Image.open("assets/icons/bars.png"),
             size=(24, 24)
         )
 
@@ -193,15 +192,15 @@ class App(customtkinter.CTk):
                                                                 values=["S-Button 1", "S-Button 2"],
                                                                 command=test_event)
         self.shutter_options.grid(row=6, column=1, padx=0, pady=10)
-        self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, step_size=1, min_value=0.0,
+        self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
                                                         max_value=1400.0)
         self.condenser_diaphragm_options.grid(row=7, column=1, padx=0, pady=10)
         self.condenser_diaphragm_options.set(700.0)
-        self.coarse_focus_options = FloatSpinbox(self.left_side_bar_frame, step_size=100, min_value=0.0,
+        self.coarse_focus_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=100, min_value=0.0,
                                                  max_value=40000.0)
         self.coarse_focus_options.grid(row=9, column=1, padx=0, pady=10)
         self.coarse_focus_options.set(20000.0)
-        self.fine_focus_options = FloatSpinbox(self.left_side_bar_frame, step_size=1, min_value=0.0,
+        self.fine_focus_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
                                                max_value=99)
         self.fine_focus_options.grid(row=10, column=1, padx=0, pady=10)
         self.fine_focus_options.set(50.0)
@@ -213,9 +212,32 @@ class App(customtkinter.CTk):
 
         self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=50)
         self.status_bar_frame.pack(fill=customtkinter.X, side=customtkinter.BOTTOM)
+
         self.status_cam = customtkinter.CTkLabel(self.status_bar_frame, text="System idle", fg_color="#bfdbfe",
                                                  font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
         self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
+        self.auto_white_balance = customtkinter.CTkButton(self.status_bar_frame, text="Auto White Balance",
+                                                          font=("Helvetica", 20), corner_radius=8, )
+        self.auto_white_balance.pack(side=customtkinter.RIGHT, padx=14, pady=14)
+        # self.auto_white_balance_label = customtkinter.CTkLabel(self.status_bar_frame, text="Auto White Balance",
+        #                                                        fg_color="#bfdbfe", font=("Helvetica", 20),
+        #                                                        corner_radius=8, text_color="#3b82f6")
+        # self.auto_white_balance_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
+        self.sharpness_level = FloatSpinbox(self.status_bar_frame, step_size=1, min_value=0.0, max_value=9.0)
+        self.sharpness_level.pack(side=customtkinter.RIGHT, padx=0, pady=14)
+        self.sharpness_label = customtkinter.CTkLabel(self.status_bar_frame, text="Sharpness", fg_color="#bfdbfe",
+                                                      font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
+        self.sharpness_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
+        self.contrast_level = FloatSpinbox(self.status_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
+        self.contrast_level.pack(side=customtkinter.RIGHT, padx=0, pady=14)
+        self.contrast_label = customtkinter.CTkLabel(self.status_bar_frame, text="Contrast", fg_color="#bfdbfe",
+                                                     font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
+        self.contrast_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
+        self.brightness_level = FloatSpinbox(self.status_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
+        self.brightness_level.pack(side=customtkinter.RIGHT, padx=0, pady=14)
+        self.brightness_label = customtkinter.CTkLabel(self.status_bar_frame, text="Brightness", fg_color="#bfdbfe",
+                                                       font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
+        self.brightness_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
 
 
 if __name__ == "__main__":
