@@ -8,12 +8,25 @@ customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
 
 
-def test_event(option: str, from_widget):
-    # @description: Only the last option will be displayed in the status bar
-    app.status_cam.configure(text=from_widget + ": " + option + " selected")
+def test_event(option):
+    """
+    :description: Only the last option will be displayed in the status bar.
+
+    To be more specific, you can statically define, which status text should be displayed for each option.
+    For example:
+        def objective_event(option):
+            app.status_cam.configure(text="Objective: " + option + " selected")
+    :param option:
+    :return:
+    """
+    app.status_cam.configure(text=option + " selected")
 
 
 def toggle_left_sidebar_event():
+    """
+    :description: Toggle left sidebar, which contains the microscope functions.
+    :return:
+    """
     if app.left_side_bar_frame.winfo_ismapped():
         # @description: Animation for sidebar
         app.left_side_bar_frame.grid_rowconfigure(15, weight=0)
@@ -29,6 +42,10 @@ def toggle_left_sidebar_event():
 
 
 def toggle_right_sidebar_event():
+    """
+    :description: Toggle right sidebar, which contains the camera settings and functions.
+    :return:
+    """
     if app.right_side_bar_frame.winfo_ismapped():
         # @description: Animation for sidebar
         app.right_side_bar_frame.grid_rowconfigure(15, weight=0)
@@ -44,8 +61,10 @@ def toggle_right_sidebar_event():
 
 
 def awb_test_event():
-    print("awb_test_event")
-    # @description: On and off button
+    """
+    :description: Change the text of the auto_white_balance button.
+    :return:
+    """
     if app.auto_white_balance.cget("text") == "OFF":
         app.auto_white_balance.configure(text="Auto")
     else:
@@ -53,8 +72,10 @@ def awb_test_event():
 
 
 def live_capture_test_event():
-    print("live_capture_test_event")
-    # @description: On and off button
+    """
+    :description: Change the text of the live_capture_button button.
+    :return:
+    """
     if app.live_capture_button.cget("text") == "OFF":
         app.live_capture_button.configure(text="Live")
     else:
@@ -62,17 +83,41 @@ def live_capture_test_event():
 
 
 def capture_test_event():
-    print("capture_test_event")
-    # @description: On and off button
+    """
+    :description: Change the text of the capture_snapshot_button button and reset it after 3 seconds.
+    :return:
+    """
     if app.capture_snapshot_button.cget("text") == "Capture":
         app.capture_snapshot_button.configure(text="Captured")
-        # @description: After 3 seconds the button will be reset
         app.after(3000, capture_test_event)
     else:
         app.capture_snapshot_button.configure(text="Capture")
 
 
 class FloatSpinbox(customtkinter.CTkFrame):
+    """
+    :description: A spinbox with float values.
+
+    The spinbox is a combination of a Tkinter Entry and two Tkinter Buttons.
+    The Entry is used to display the current value, and the Buttons are used to increase or decrease the value.
+
+    To get the current value, use the get() method. To set the current value, use the set() method.
+
+    The spinbox can be configured with the following parameters:
+        width: The width of the spinbox in pixels.
+        height: The height of the spinbox in pixels.
+        step_size: The step size, which is used to increase or decrease the value.
+        min_value: The minimum value, which can be set.
+        max_value: The maximum value, which can be set.
+        command: A function, which is called, when the value is changed.
+
+    Example:
+        spinbox = FloatSpinbox(root, width=100, height=30, step_size=0.1, min_value=0, max_value=10, command=print)
+        spinbox.pack()
+
+        print(spinbox.get())  # prints the current value
+        spinbox.set(5)  # sets the current value to 5
+    """
     def __init__(self, *args,
                  width: Union[int, float] = 100,
                  height: Union[int, float] = 30,
@@ -107,6 +152,12 @@ class FloatSpinbox(customtkinter.CTkFrame):
         self.entry.insert(0, "0.0")
 
     def add_button_callback(self):
+        """
+        :description: Increase the value by the step size.
+
+        If the value is greater than the maximum value, the value is set to the maximum value.
+        :return:
+        """
         if self.command is not None:
             self.command()
         try:
@@ -123,6 +174,12 @@ class FloatSpinbox(customtkinter.CTkFrame):
             return
 
     def subtract_button_callback(self):
+        """
+        :description: Decrease the value by the step size.
+        If the value is less than the minimum value, the value is set to the minimum value.
+
+        :return: The current value as a float or None, if the value is not a float.
+        """
         if self.command is not None:
             self.command()
         try:
@@ -139,18 +196,40 @@ class FloatSpinbox(customtkinter.CTkFrame):
             return
 
     def get(self) -> Union[float, None]:
+        """
+        :description: Get the current value.
+        If the value is not a float, None is returned.
+
+        :return: The current value.
+        """
         try:
             return float(self.entry.get())
         except ValueError:
             return None
 
     def set(self, value: float):
+        """
+        :description: Set a new value.
+        :param value:
+        :return:
+        """
         self.entry.delete(0, "end")
         self.entry.insert(0, str(float(value)))
 
 
 class App(customtkinter.CTk):
+    """
+    :description: Main application class for the application window and all widgets inside.
+
+    :param customtkinter.CTk: The base class for the application window.
+    :type customtkinter.CTk: customtkinter.CTk
+    """
     def __init__(self):
+        """
+        :description: Initialize the application window and all widgets inside the window.
+        __init__ is called when the class is instantiated and is the first method to be called.
+        super().__init__() calls the __init__ method of the parent class (customtkinter.CTk).
+        """
         super().__init__()
 
         # @description: configure window by 1100x580 pixels with title "App title"
