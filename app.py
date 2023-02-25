@@ -8,10 +8,9 @@ customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
 
 
-def test_event(option: str):
-    print(option)
+def test_event(option: str, from_widget):
     # @description: Only the last option will be displayed in the status bar
-    app.status_cam.configure(text=option + " selected")
+    app.status_cam.configure(text=from_widget + ": " + option + " selected")
 
 
 def toggle_left_sidebar_event():
@@ -51,6 +50,26 @@ def awb_test_event():
         app.auto_white_balance.configure(text="Auto")
     else:
         app.auto_white_balance.configure(text="OFF")
+
+
+def live_capture_test_event():
+    print("live_capture_test_event")
+    # @description: On and off button
+    if app.live_capture_button.cget("text") == "OFF":
+        app.live_capture_button.configure(text="Live")
+    else:
+        app.live_capture_button.configure(text="OFF")
+
+
+def capture_test_event():
+    print("capture_test_event")
+    # @description: On and off button
+    if app.capture_snapshot_button.cget("text") == "Capture":
+        app.capture_snapshot_button.configure(text="Captured")
+        # @description: After 3 seconds the button will be reset
+        app.after(3000, capture_test_event)
+    else:
+        app.capture_snapshot_button.configure(text="Capture")
 
 
 class FloatSpinbox(customtkinter.CTkFrame):
@@ -206,20 +225,40 @@ class App(customtkinter.CTk):
                                                        font=customtkinter.CTkFont(size=20))
         self.fine_focus_label.grid(row=10, column=0, padx=20, pady=0)
 
+        objective_options_lists = [
+            "Option 1.1", "Option 2.1", "Option 3.1", "Option 4.1", "Option 5.1", "Option 6.1",
+        ]
+
+        condenser_options_lists = [
+            "Option 1.2", "Option 2.2", "Option 3.2", "Option 4.2", "Option 5.2", "Option 6.2",
+        ]
+
+        reflector_options_lists = [
+            "Option 1.3", "Option 2.3", "Option 3.3", "Option 4.3", "Option 5.3",
+        ]
+
+        side_port_options_lists = [
+            "Option 1.4", "Option 2.4", "Option 3.4"
+        ]
+
+        tube_lens_options_lists = [
+            "Option 1.5", "Option 2.5", "Option 3.5"
+        ]
+
         self.objective_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=["Option 1.1", "Option 2.1", "Option 3.1"], command=test_event)
+            self.left_side_bar_frame, values=objective_options_lists, command=test_event)
         self.objective_options.grid(row=1, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=["Option 1.2", "Option 2.2", "Option 3.2"], command=test_event)
+            self.left_side_bar_frame, values=condenser_options_lists, command=test_event)
         self.condenser_options.grid(row=2, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.reflector_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=["Option 1.3", "Option 2.3", "Option 3.3"], command=test_event)
+            self.left_side_bar_frame, values=reflector_options_lists, command=test_event)
         self.reflector_options.grid(row=3, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.side_port = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=["Option 1.4", "Option 2.4", "Option 3.4"], command=test_event)
+            self.left_side_bar_frame, values=side_port_options_lists, command=test_event)
         self.side_port.grid(row=4, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.tube_lens_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=["Option 1.5", "Option 2.5", "Option 3.5"], command=test_event)
+            self.left_side_bar_frame, values=tube_lens_options_lists, command=test_event)
         self.tube_lens_options.grid(row=5, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.shutter_options = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
                                                                 values=["S-Button 1", "S-Button 2"],
@@ -242,28 +281,6 @@ class App(customtkinter.CTk):
             fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8,
             text_color="#3b82f6", )
         self.z_drive_config.grid(row=8, column=1, padx=20, pady=10, sticky=customtkinter.W)
-
-        self.camera_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Camera Functions",
-                                                             font=customtkinter.CTkFont("Helvetica", 20, "bold"))
-        self.camera_functions_label.grid(row=11, column=0, sticky=customtkinter.W, padx=14, pady=14)
-
-        self.button_3 = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=24, text="Button 3",
-                                                fg_color="#3b82f6", corner_radius=8, hover_color=None,
-                                                text_color="white", font=("Helvetica", 14))
-        self.button_3.grid(row=12, column=0, padx=20, pady=14, sticky=customtkinter.W)
-        self.button_4 = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=24, text="Button 4",
-                                                fg_color="#3b82f6", corner_radius=8, hover_color=None,
-                                                text_color="white", font=("Helvetica", 14))
-        self.button_4.grid(row=13, column=0, padx=20, pady=14, sticky=customtkinter.W)
-        self.live_capture_button = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=26,
-                                                           text="Live Capture", fg_color="#3b82f6", corner_radius=8,
-                                                           text_color="white", font=("Helvetica", 14))
-        self.live_capture_button.grid(row=12, column=1, padx=20, pady=14, sticky=customtkinter.W)
-        self.capture_snapshot_button = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=26,
-                                                               text="Capture Snapshot", fg_color="#3b82f6",
-                                                               corner_radius=8, text_color="white",
-                                                               font=("Helvetica", 14))
-        self.capture_snapshot_button.grid(row=13, column=1, padx=20, pady=14, sticky=customtkinter.W)
         # @description: Left sidebar frame ends here
 
         # @description: Right sidebar frame starts here
@@ -289,7 +306,7 @@ class App(customtkinter.CTk):
         self.brightness_label.grid(row=4, column=0, sticky=customtkinter.W, padx=14, pady=14)
 
         self.auto_white_balance = customtkinter.CTkButton(self.right_side_bar_frame, text="Auto",
-                                                          font=("Helvetica", 20), corner_radius=8,
+                                                          font=("Helvetica", 14), corner_radius=8,
                                                           command=awb_test_event)
         self.auto_white_balance.grid(row=1, column=1, sticky=customtkinter.W, padx=14, pady=14)
         self.sharpness_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=9.0)
@@ -298,6 +315,38 @@ class App(customtkinter.CTk):
         self.contrast_level.grid(row=3, column=1, sticky=customtkinter.W, padx=14, pady=14)
         self.brightness_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
         self.brightness_level.grid(row=4, column=1, sticky=customtkinter.W, padx=14, pady=14)
+        self.camera_functions_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Camera Functions",
+                                                             font=customtkinter.CTkFont("Helvetica", 20, "bold"))
+        self.camera_functions_label.grid(row=5, column=0, sticky=customtkinter.W, padx=14, pady=14)
+        self.live_capture_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Live Capture",
+                                                         font=customtkinter.CTkFont(size=20))
+        self.live_capture_label.grid(row=6, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        self.capture_snapshot_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Capture Snapshot",
+                                                             font=customtkinter.CTkFont(size=20))
+        self.capture_snapshot_label.grid(row=7, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        self.button_3_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Button 3",
+                                                     font=customtkinter.CTkFont(size=20))
+        self.button_3_label.grid(row=8, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        self.button_4_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Button 4",
+                                                     font=customtkinter.CTkFont(size=20))
+        self.button_4_label.grid(row=9, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        self.live_capture_button = customtkinter.CTkButton(self.right_side_bar_frame, text="OFF", fg_color="#3b82f6",
+                                                           corner_radius=8, text_color="white", font=("Helvetica", 14),
+                                                           command=live_capture_test_event)
+        self.live_capture_button.grid(row=6, column=1, padx=20, pady=14, sticky=customtkinter.W)
+        self.capture_snapshot_button = customtkinter.CTkButton(self.right_side_bar_frame, text="Capture",
+                                                               fg_color="#3b82f6", corner_radius=8, text_color="white",
+                                                               font=("Helvetica", 14), command=capture_test_event)
+        self.capture_snapshot_button.grid(row=7, column=1, padx=20, pady=14, sticky=customtkinter.W)
+        self.button_3 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 3",  fg_color="#3b82f6",
+                                                corner_radius=8, hover_color=None,  text_color="white",
+                                                font=("Helvetica", 14))
+        self.button_3.grid(row=8, column=1, padx=20, pady=14, sticky=customtkinter.W)
+        self.button_4 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 4", fg_color="#3b82f6",
+                                                corner_radius=8, hover_color=None,
+                                                text_color="white", font=("Helvetica", 14))
+        self.button_4.grid(row=9, column=1, padx=20, pady=14, sticky=customtkinter.W)
+
         # @description: Right sidebar frame ends here
 
         # @description: Status bar frame starts here
