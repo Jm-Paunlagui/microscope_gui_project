@@ -145,16 +145,6 @@ class App(customtkinter.CTk):
             size=(24, 24)
         )
 
-        # live = customtkinter.CTkImage(
-        #     light_image=Image.open("assets/icons/clapperboard-solid.png"),
-        #     size=(24, 24)
-        # )
-        #
-        # capture = customtkinter.CTkImage(
-        #     light_image=Image.open("assets/icons/border-top-left-solid.png"),
-        #     size=(24, 24)
-        # )
-
         gear = customtkinter.CTkImage(
             light_image=Image.open("assets/icons/gear-solid.png"),
             size=(24, 24)
@@ -256,18 +246,6 @@ class App(customtkinter.CTk):
         self.camera_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Camera Functions",
                                                              font=customtkinter.CTkFont("Helvetica", 20, "bold"))
         self.camera_functions_label.grid(row=11, column=0, sticky=customtkinter.W, padx=14, pady=14)
-        # self.button_3_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Button 3",
-        #                                              font=customtkinter.CTkFont(size=20))
-        # self.button_3_label.grid(row=12, column=0, padx=20, pady=0, sticky=customtkinter.W)
-        # self.button_4_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Button 4",
-        #                                              font=customtkinter.CTkFont(size=20))
-        # self.button_4_label.grid(row=13, column=0, padx=20, pady=0, sticky=customtkinter.W)
-        # self.live_capture_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Live Capture",
-        #                                                  font=customtkinter.CTkFont(size=20))
-        # self.live_capture_label.grid(row=14, column=0, padx=20, pady=0, sticky=customtkinter.W)
-        # self.capture_snapshot_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Capture Snapshot",
-        #                                                      font=customtkinter.CTkFont(size=20))
-        # self.capture_snapshot_label.grid(row=15, column=0, padx=20, pady=0, sticky=customtkinter.W)
 
         self.button_3 = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=24, text="Button 3",
                                                 fg_color="#3b82f6", corner_radius=8, hover_color=None,
@@ -331,8 +309,13 @@ class App(customtkinter.CTk):
         self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
         # @description: Status bar frame ends here
 
+
 if __name__ == "__main__":
     app = App()
-    # @description: Hides the sidebar when escape is pressed and shows it when it is pressed again
-    # app.bind("<Escape>", lambda e: app.toggle_sidebar_esc())
+    # @description: Hides the sidebar when escape is pressed
+    app.bind("<Escape>", lambda e: app.left_side_bar_frame.pack_forget() or app.right_side_bar_frame.pack_forget())
+    # @description: Shows the Left sidebar when F1 is pressed
+    app.bind("<F1>", lambda e: app.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y))
+    # @description: Shows the Right sidebar when F2 is pressed
+    app.bind("<F2>", lambda e: app.right_side_bar_frame.pack(side=customtkinter.RIGHT, fill=customtkinter.Y))
     app.mainloop()
