@@ -14,7 +14,7 @@ def test_event(option: str):
     app.status_cam.configure(text=option + " selected")
 
 
-def toggle_sidebar_event():
+def toggle_left_sidebar_event():
     if app.left_side_bar_frame.winfo_ismapped():
         # @description: Animation for sidebar
         app.left_side_bar_frame.grid_rowconfigure(15, weight=0)
@@ -27,6 +27,30 @@ def toggle_sidebar_event():
         time.sleep(0.01)
         app.update()
         app.left_side_bar_frame.lift()
+
+
+def toggle_right_sidebar_event():
+    if app.right_side_bar_frame.winfo_ismapped():
+        # @description: Animation for sidebar
+        app.right_side_bar_frame.grid_rowconfigure(15, weight=0)
+        time.sleep(0.01)
+        app.update()
+        app.right_side_bar_frame.pack_forget()
+    else:
+        app.right_side_bar_frame.pack(side=customtkinter.RIGHT, fill=customtkinter.Y)
+        app.right_side_bar_frame.grid_rowconfigure(15, weight=1)
+        time.sleep(0.01)
+        app.update()
+        app.right_side_bar_frame.lift()
+
+
+def awb_test_event():
+    print("awb_test_event")
+    # @description: On and off button
+    if app.auto_white_balance.cget("text") == "OFF":
+        app.auto_white_balance.configure(text="Auto")
+    else:
+        app.auto_white_balance.configure(text="OFF")
 
 
 class FloatSpinbox(customtkinter.CTkFrame):
@@ -72,7 +96,7 @@ class FloatSpinbox(customtkinter.CTkFrame):
                 value = self.max_value
             self.entry.delete(0, "end")
             self.entry.insert(0, value if value >= 0 else 0)
-            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get()} - {app.fine_focus_options.get()}")
+            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get()}")
             if app.condenser_diaphragm_options.get() is not None:
                 app.status_cam.configure(
                     text=f"Condenser : {app.condenser_diaphragm_options.get()}")
@@ -88,7 +112,7 @@ class FloatSpinbox(customtkinter.CTkFrame):
                 value = self.min_value
             self.entry.delete(0, "end")
             self.entry.insert(0, value if value <= self.max_value else self.max_value)
-            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get()} - {app.fine_focus_options.get()}")
+            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get()}")
             if app.condenser_diaphragm_options.get() is not None:
                 app.status_cam.configure(
                     text=f"Condenser : {app.condenser_diaphragm_options.get()}")
@@ -121,22 +145,41 @@ class App(customtkinter.CTk):
             size=(24, 24)
         )
 
-        # @description: Top Bar frame with widgets (hambuger menu, title, settings, ...)
-        self.top_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=48)
-        self.top_bar_frame.pack(fill=customtkinter.X, side=customtkinter.TOP)
+        # live = customtkinter.CTkImage(
+        #     light_image=Image.open("assets/icons/clapperboard-solid.png"),
+        #     size=(24, 24)
+        # )
+        #
+        # capture = customtkinter.CTkImage(
+        #     light_image=Image.open("assets/icons/border-top-left-solid.png"),
+        #     size=(24, 24)
+        # )
 
-        # @description: Top Bar frame with widgets (hambuger menu, title, settings, ...)
-        self.menu_button = customtkinter.CTkButton(self.top_bar_frame, width=18, image=bars, text="", fg_color="white",
-                                                   corner_radius=8, hover_color="white", text_color="white",
-                                                   command=toggle_sidebar_event)
-        self.menu_button.pack(side=customtkinter.LEFT, padx=14, pady=14)
+        gear = customtkinter.CTkImage(
+            light_image=Image.open("assets/icons/gear-solid.png"),
+            size=(24, 24)
+        )
+
+        # @description: Top bar frame starts here
+        self.top_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=54)
+        self.top_bar_frame.pack(fill=customtkinter.X, side=customtkinter.TOP)
+        self.menu_button = customtkinter.CTkButton(self.top_bar_frame, width=24, height=24, image=bars, text="",
+                                                   fg_color="white", corner_radius=8, hover_color="white",
+                                                   text_color="white", command=toggle_left_sidebar_event)
+        self.menu_button.pack(side=customtkinter.LEFT, padx=8, pady=14)
+        self.settings_button = customtkinter.CTkButton(self.top_bar_frame, width=24, height=24, image=gear, text="",
+                                                       fg_color="white", corner_radius=8, hover_color="white",
+                                                       text_color="white", command=toggle_right_sidebar_event)
+        self.settings_button.pack(side=customtkinter.RIGHT, padx=8, pady=14)
         self.top_bar_title = customtkinter.CTkLabel(self.top_bar_frame, text="App title",
                                                     font=("Helvetica", 20, "bold"), text_color="black")
         self.top_bar_title.pack(side=customtkinter.LEFT, padx=0, pady=14)
+        # @description: Top bar frame ends here
+
+        # @description: Left sidebar frame starts here
         self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
         self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
         self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
-        # @description: Initial state of the sidebar is hidden (pack_forget)
         self.left_side_bar_frame.pack_forget()
 
         self.microscope_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Microscope Functions",
@@ -178,67 +221,115 @@ class App(customtkinter.CTk):
         self.objective_options.grid(row=1, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.2", "Option 2.2", "Option 3.2"], command=test_event)
-        self.condenser_options.grid(row=2, column=1, padx=0, pady=10)
+        self.condenser_options.grid(row=2, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.reflector_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.3", "Option 2.3", "Option 3.3"], command=test_event)
-        self.reflector_options.grid(row=3, column=1, padx=0, pady=10)
+        self.reflector_options.grid(row=3, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.side_port = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.4", "Option 2.4", "Option 3.4"], command=test_event)
-        self.side_port.grid(row=4, column=1, padx=0, pady=10)
+        self.side_port.grid(row=4, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.tube_lens_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=["Option 1.5", "Option 2.5", "Option 3.5"], command=test_event)
-        self.tube_lens_options.grid(row=5, column=1, padx=0, pady=10)
+        self.tube_lens_options.grid(row=5, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.shutter_options = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
                                                                 values=["S-Button 1", "S-Button 2"],
                                                                 command=test_event)
-        self.shutter_options.grid(row=6, column=1, padx=0, pady=10)
+        self.shutter_options.grid(row=6, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
                                                         max_value=1400.0)
-        self.condenser_diaphragm_options.grid(row=7, column=1, padx=0, pady=10)
+        self.condenser_diaphragm_options.grid(row=7, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_diaphragm_options.set(700.0)
         self.coarse_focus_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=100, min_value=0.0,
                                                  max_value=40000.0)
-        self.coarse_focus_options.grid(row=9, column=1, padx=0, pady=10)
+        self.coarse_focus_options.grid(row=9, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.coarse_focus_options.set(20000.0)
         self.fine_focus_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
                                                max_value=99)
-        self.fine_focus_options.grid(row=10, column=1, padx=0, pady=10)
+        self.fine_focus_options.grid(row=10, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.fine_focus_options.set(50.0)
         self.z_drive_config = customtkinter.CTkLabel(
-            self.left_side_bar_frame, text=f"{self.coarse_focus_options.get()} - {self.fine_focus_options.get()}",
+            self.left_side_bar_frame, text=f"{self.coarse_focus_options.get() + self.fine_focus_options.get()}",
             fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8,
             text_color="#3b82f6", )
-        self.z_drive_config.grid(row=8, column=1, padx=0, pady=10)
+        self.z_drive_config.grid(row=8, column=1, padx=20, pady=10, sticky=customtkinter.W)
 
-        self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=50)
+        self.camera_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Camera Functions",
+                                                             font=customtkinter.CTkFont("Helvetica", 20, "bold"))
+        self.camera_functions_label.grid(row=11, column=0, sticky=customtkinter.W, padx=14, pady=14)
+        # self.button_3_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Button 3",
+        #                                              font=customtkinter.CTkFont(size=20))
+        # self.button_3_label.grid(row=12, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        # self.button_4_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Button 4",
+        #                                              font=customtkinter.CTkFont(size=20))
+        # self.button_4_label.grid(row=13, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        # self.live_capture_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Live Capture",
+        #                                                  font=customtkinter.CTkFont(size=20))
+        # self.live_capture_label.grid(row=14, column=0, padx=20, pady=0, sticky=customtkinter.W)
+        # self.capture_snapshot_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Capture Snapshot",
+        #                                                      font=customtkinter.CTkFont(size=20))
+        # self.capture_snapshot_label.grid(row=15, column=0, padx=20, pady=0, sticky=customtkinter.W)
+
+        self.button_3 = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=24, text="Button 3",
+                                                fg_color="#3b82f6", corner_radius=8, hover_color=None,
+                                                text_color="white", font=("Helvetica", 14))
+        self.button_3.grid(row=12, column=0, padx=20, pady=14, sticky=customtkinter.W)
+        self.button_4 = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=24, text="Button 4",
+                                                fg_color="#3b82f6", corner_radius=8, hover_color=None,
+                                                text_color="white", font=("Helvetica", 14))
+        self.button_4.grid(row=13, column=0, padx=20, pady=14, sticky=customtkinter.W)
+        self.live_capture_button = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=26,
+                                                           text="Live Capture", fg_color="#3b82f6", corner_radius=8,
+                                                           text_color="white", font=("Helvetica", 14))
+        self.live_capture_button.grid(row=12, column=1, padx=20, pady=14, sticky=customtkinter.W)
+        self.capture_snapshot_button = customtkinter.CTkButton(self.left_side_bar_frame, width=24, height=26,
+                                                               text="Capture Snapshot", fg_color="#3b82f6",
+                                                               corner_radius=8, text_color="white",
+                                                               font=("Helvetica", 14))
+        self.capture_snapshot_button.grid(row=13, column=1, padx=20, pady=14, sticky=customtkinter.W)
+        # @description: Left sidebar frame ends here
+
+        # @description: Right sidebar frame starts here
+        self.right_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
+        self.right_side_bar_frame.pack(side=customtkinter.RIGHT, fill=customtkinter.Y)
+        self.right_side_bar_frame.grid_rowconfigure(15, weight=1)
+
+        self.right_side_bar_frame.pack_forget()
+        self.camera_settings_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Camera Settings",
+                                                            font=customtkinter.CTkFont("Helvetica", 20, "bold"))
+        self.camera_settings_label.grid(row=0, column=0, sticky=customtkinter.W, padx=14, pady=14)
+        self.auto_white_balance_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Auto White Balance",
+                                                               font=customtkinter.CTkFont(size=20))
+        self.auto_white_balance_label.grid(row=1, column=0, sticky=customtkinter.W, padx=14, pady=14)
+        self.sharpness_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Sharpness",
+                                                      font=customtkinter.CTkFont(size=20))
+        self.sharpness_label.grid(row=2, column=0, sticky=customtkinter.W, padx=14, pady=14)
+        self.contrast_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Contrast",
+                                                     font=customtkinter.CTkFont(size=20))
+        self.contrast_label.grid(row=3, column=0, sticky=customtkinter.W, padx=14, pady=14)
+        self.brightness_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Brightness",
+                                                       font=customtkinter.CTkFont(size=20))
+        self.brightness_label.grid(row=4, column=0, sticky=customtkinter.W, padx=14, pady=14)
+
+        self.auto_white_balance = customtkinter.CTkButton(self.right_side_bar_frame, text="Auto",
+                                                          font=("Helvetica", 20), corner_radius=8,
+                                                          command=awb_test_event)
+        self.auto_white_balance.grid(row=1, column=1, sticky=customtkinter.W, padx=14, pady=14)
+        self.sharpness_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=9.0)
+        self.sharpness_level.grid(row=2, column=1, sticky=customtkinter.W, padx=14, pady=14)
+        self.contrast_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
+        self.contrast_level.grid(row=3, column=1, sticky=customtkinter.W, padx=14, pady=14)
+        self.brightness_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
+        self.brightness_level.grid(row=4, column=1, sticky=customtkinter.W, padx=14, pady=14)
+        # @description: Right sidebar frame ends here
+
+        # @description: Status bar frame starts here
+        self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=54)
         self.status_bar_frame.pack(fill=customtkinter.X, side=customtkinter.BOTTOM)
 
         self.status_cam = customtkinter.CTkLabel(self.status_bar_frame, text="System idle", fg_color="#bfdbfe",
                                                  font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
         self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
-        self.auto_white_balance = customtkinter.CTkButton(self.status_bar_frame, text="Auto White Balance",
-                                                          font=("Helvetica", 20), corner_radius=8, )
-        self.auto_white_balance.pack(side=customtkinter.RIGHT, padx=14, pady=14)
-        # self.auto_white_balance_label = customtkinter.CTkLabel(self.status_bar_frame, text="Auto White Balance",
-        #                                                        fg_color="#bfdbfe", font=("Helvetica", 20),
-        #                                                        corner_radius=8, text_color="#3b82f6")
-        # self.auto_white_balance_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
-        self.sharpness_level = FloatSpinbox(self.status_bar_frame, step_size=1, min_value=0.0, max_value=9.0)
-        self.sharpness_level.pack(side=customtkinter.RIGHT, padx=0, pady=14)
-        self.sharpness_label = customtkinter.CTkLabel(self.status_bar_frame, text="Sharpness", fg_color="#bfdbfe",
-                                                      font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
-        self.sharpness_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
-        self.contrast_level = FloatSpinbox(self.status_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
-        self.contrast_level.pack(side=customtkinter.RIGHT, padx=0, pady=14)
-        self.contrast_label = customtkinter.CTkLabel(self.status_bar_frame, text="Contrast", fg_color="#bfdbfe",
-                                                     font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
-        self.contrast_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
-        self.brightness_level = FloatSpinbox(self.status_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
-        self.brightness_level.pack(side=customtkinter.RIGHT, padx=0, pady=14)
-        self.brightness_label = customtkinter.CTkLabel(self.status_bar_frame, text="Brightness", fg_color="#bfdbfe",
-                                                       font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
-        self.brightness_label.pack(side=customtkinter.RIGHT, padx=14, pady=14)
-
+        # @description: Status bar frame ends here
 
 if __name__ == "__main__":
     app = App()
