@@ -1,5 +1,6 @@
 import time
 from typing import Union, Callable
+from tkinter import messagebox
 import customtkinter
 import cv2
 from PIL import Image, ImageTk
@@ -22,42 +23,42 @@ def test_event(option):
     app.status_cam.configure(text=option + " selected")
 
 
+left_side_bar_state = False
+right_side_bar_state = False
+
+
 def toggle_left_sidebar_event():
     """
     :description: Toggle left sidebar, which contains the microscope functions.
     :return:
     """
-    if app.left_side_bar_frame.winfo_ismapped():
-        # @description: Animation for sidebar
-        app.left_side_bar_frame.grid_rowconfigure(15, weight=0)
-        time.sleep(0.01)
+    global left_side_bar_state
+    if left_side_bar_state is True:
+        app.left_side_bar_frame.place(x=-560, y=60, relwidth=0.32, relheight=0.89)
         app.update()
-        app.left_side_bar_frame.pack_forget()
+        left_side_bar_state = False
     else:
-        app.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
-        app.left_side_bar_frame.grid_rowconfigure(15, weight=1)
-        time.sleep(0.01)
+        app.left_side_bar_frame.place(x=0, y=60, relwidth=0.32, relheight=0.89)
         app.update()
         app.left_side_bar_frame.lift()
+        left_side_bar_state = True
 
 
 def toggle_right_sidebar_event():
     """
-    :description: Toggle right sidebar, which contains the camera settings and functions.
+    :description: Toggle right sidebar, which contains the settings functions.
     :return:
     """
-    if app.right_side_bar_frame.winfo_ismapped():
-        # @description: Animation for sidebar
-        app.right_side_bar_frame.grid_rowconfigure(15, weight=0)
-        time.sleep(0.01)
+    global right_side_bar_state
+    if right_side_bar_state is None or right_side_bar_state is True:
+        app.right_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.89)
         app.update()
-        app.right_side_bar_frame.pack_forget()
+        right_side_bar_state = False
     else:
-        app.right_side_bar_frame.pack(side=customtkinter.RIGHT, fill=customtkinter.Y)
-        app.right_side_bar_frame.grid_rowconfigure(15, weight=1)
-        time.sleep(0.01)
+        app.right_side_bar_frame.place(x=1112, y=60, relwidth=0.34, relheight=0.89)
         app.update()
         app.right_side_bar_frame.lift()
+        right_side_bar_state = True
 
 
 def awb_test_event():
@@ -94,6 +95,29 @@ def capture_test_event():
         app.capture_snapshot_button.configure(text="Capture")
 
 
+def message_box_test_event():
+    """
+    :description: Show a message box.
+    :return: Message box
+
+    Examples of message boxes:
+        messagebox.showinfo("showinfo", "Information")
+
+        messagebox.showwarning("showwarning", "Warning")
+
+        messagebox.showerror("showerror", "Error")
+
+        messagebox.askquestion("askquestion", "Are you sure?")
+
+        messagebox.askokcancel("askokcancel", "Want to continue?")
+
+        messagebox.askyesno("askyesno", "Find the value?")
+
+        messagebox.askretrycancel("askretrycancel", "Try again?")
+    """
+    messagebox.showinfo("Sample", "This is a sample message box.")
+
+
 class FloatSpinbox(customtkinter.CTkFrame):
     """
     :description: A spinbox with float values.
@@ -118,6 +142,7 @@ class FloatSpinbox(customtkinter.CTkFrame):
         print(spinbox.get())  # prints the current value
         spinbox.set(5)  # sets the current value to 5
     """
+
     def __init__(self, *args,
                  width: Union[int, float] = 100,
                  height: Union[int, float] = 30,
@@ -224,6 +249,7 @@ class App(customtkinter.CTk):
     :param customtkinter.CTk: The base class for the application window.
     :type customtkinter.CTk: customtkinter.CTk
     """
+
     def __init__(self):
         """
         :description: Initialize the application window and all widgets inside the window.
@@ -234,7 +260,7 @@ class App(customtkinter.CTk):
 
         # @description: configure window by 1100x580 pixels with title "App title"
         self.title("App title")
-        self.geometry(f"{1280}x{832}")
+        self.geometry(f"{1512}x{982}")
         self.configure(fg_color="#d1d5db")
 
         # @description: Menu icon
@@ -266,9 +292,12 @@ class App(customtkinter.CTk):
 
         # @description: Left sidebar frame starts here
         self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
+        # self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
+        # self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
+        # self.left_side_bar_frame.pack_forget()
         self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
+        self.left_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.89)
         self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
-        self.left_side_bar_frame.pack_forget()
 
         self.microscope_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Microscope Functions",
                                                                  font=customtkinter.CTkFont("Helvetica", 20, "bold"))
@@ -364,7 +393,7 @@ class App(customtkinter.CTk):
 
         # @description: Right sidebar frame starts here
         self.right_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
-        self.right_side_bar_frame.pack(side=customtkinter.RIGHT, fill=customtkinter.Y)
+        self.right_side_bar_frame.place(x=1112, y=60, relwidth=0.34, relheight=0.89)
         self.right_side_bar_frame.grid_rowconfigure(15, weight=1)
 
         self.right_side_bar_frame.pack_forget()
@@ -417,13 +446,14 @@ class App(customtkinter.CTk):
                                                                fg_color="#3b82f6", corner_radius=8, text_color="white",
                                                                font=("Helvetica", 14), command=capture_test_event)
         self.capture_snapshot_button.grid(row=7, column=1, padx=20, pady=14, sticky=customtkinter.W)
-        self.button_3 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 3",  fg_color="#3b82f6",
-                                                corner_radius=8, hover_color=None,  text_color="white",
-                                                font=("Helvetica", 14))
+        self.button_3 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 3", fg_color="#3b82f6",
+                                                corner_radius=8, hover_color=None, text_color="white",
+                                                font=("Helvetica", 14), command=message_box_test_event)
         self.button_3.grid(row=8, column=1, padx=20, pady=14, sticky=customtkinter.W)
         self.button_4 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 4", fg_color="#3b82f6",
                                                 corner_radius=8, hover_color=None,
-                                                text_color="white", font=("Helvetica", 14))
+                                                text_color="white", font=("Helvetica", 14),
+                                                command=message_box_test_event)
         self.button_4.grid(row=9, column=1, padx=20, pady=14, sticky=customtkinter.W)
 
         # @description: Right sidebar frame ends here
@@ -437,11 +467,62 @@ class App(customtkinter.CTk):
         self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
         # @description: Status bar frame ends here
 
+        # @description: Main frame starts here
+        self.content_frame = customtkinter.CTkFrame(self, )
+        self.content_frame.pack(fill=customtkinter.BOTH, expand=customtkinter.YES, side=customtkinter.TOP)
+
+        self.camera_canvas = customtkinter.CTkCanvas(self.content_frame, width=self.content_frame.winfo_width(),
+                                                     height=self.content_frame.winfo_height())
+        self.camera_canvas.pack(fill="both", expand=True)
+
+        # @description: Camera VideoCapture
+        # VideoCapture here:
+        self.cap = cv2.VideoCapture(0)
+
+        # Set the time limit to 30 seconds
+        self.time_limit = 30
+
+        # Initialize the last frame time and the hover flag
+        self.last_frame_time = time.time()
+
+        # @description: Camera image update function
+        def update_image():
+            ret, frame = self.cap.read()
+            if ret:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                width = self.camera_canvas.winfo_width()
+                height = self.camera_canvas.winfo_height()
+                if width > 1 and height > 1:
+                    frame = cv2.resize(frame, (width, height))
+                    frame = cv2.flip(frame, 1)
+                    frame = Image.fromarray(frame)
+                    frame = ImageTk.PhotoImage(frame)
+                    self.camera_canvas.create_image(0, 0, image=frame, anchor="nw")
+                    self.camera_canvas.image = frame
+            else:
+                inactive_camera()
+            self.camera_canvas.after(1, update_image)
+
+        def inactive_camera():
+            self.cap.release()
+            self.camera_canvas.destroy()
+            self.camera_canvas = customtkinter.CTkCanvas(self.content_frame, width=self.content_frame.winfo_width(),
+                                                         height=self.content_frame.winfo_height(), closeenough=1)
+            self.camera_canvas.pack(fill="both", expand=True)
+            self.inactive_camera_label = customtkinter.CTkLabel(self.camera_canvas, text="Camera not in use",
+                                                                font=customtkinter.CTkFont(size=20, weight="bold"))
+            self.inactive_camera_label.place(relx=0.5, rely=0.5, anchor="center")
+
+        # @description: Update the image
+        # update_image()
+        inactive_camera()
+
 
 if __name__ == "__main__":
     app = App()
     # @description: Hides the sidebar when escape is pressed
-    app.bind("<Escape>", lambda e: app.left_side_bar_frame.pack_forget() or app.right_side_bar_frame.pack_forget())
+    app.bind("<Escape>", lambda e: app.left_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.9) or
+                                   app.right_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.9))
     # @description: Shows the Left sidebar when F1 is pressed
     app.bind("<F1>", lambda e: app.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y))
     # @description: Shows the Right sidebar when F2 is pressed
