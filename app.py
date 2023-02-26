@@ -415,6 +415,8 @@ class App(customtkinter.CTk):
         self.shutter_options = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
                                                                 values=["S-Button 1", "S-Button 2"],
                                                                 command=test_event)
+        # default value for segmented button
+        self.shutter_options.set("S-Button 2")
         self.shutter_options.grid(row=6, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
                                                         max_value=1400.0)
