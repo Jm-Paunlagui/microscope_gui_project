@@ -320,6 +320,7 @@ class App(customtkinter.CTk):
 
         print(self.left_side_bar.get())
         print(self.right_side_bar.get())
+        print(self.relwidth_side_bar.get())
 
         # @description: Menu icon
         bars = customtkinter.CTkImage(
