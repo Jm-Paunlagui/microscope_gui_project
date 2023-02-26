@@ -23,6 +23,7 @@ def test_event(option):
     app.status_cam.configure(text=option + " selected")
 
 
+# Initial state of the sidebars
 left_side_bar_state = False
 right_side_bar_state = False
 
