@@ -266,7 +266,7 @@ class App(customtkinter.CTk):
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
         self.configure(fg_color="#d1d5db")
 
-        self.minsize(1280, 832)
+        self.minsize(self.winfo_screenwidth(), self.winfo_screenheight())
         self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight())
 
         self.left_side_bar = customtkinter.IntVar()
