@@ -31,11 +31,6 @@ def toggle_left_sidebar_event():
     """
     :description: Toggle left sidebar, which contains the microscope functions.
     :return:
-    Device resolution list:
-        MacBook Air—1280×832—x=-500.
-        MacBook Pro—1512×982—x=-560.
-        MacBook Pro—1728×1117—x=-620.
-        Desktop—1920×1080—x=-680.
     """
     global left_side_bar_state
     if left_side_bar_state is True:
@@ -54,12 +49,6 @@ def toggle_right_sidebar_event():
     """
     :description: Toggle right sidebar, which contains the settings functions.
     :return:
-
-    Device resolution list:
-        MacBook Air—1280×832—x=880.
-        MacBook Pro—1512×982—x=1112.
-        MacBook Pro—1728×1117—x=1344.
-        Desktop—1920×1080—x=1576.
     """
     global right_side_bar_state
     if right_side_bar_state is None or right_side_bar_state is True:
@@ -317,10 +306,6 @@ class App(customtkinter.CTk):
                 self.left_side_bar.set(-520)
                 self.right_side_bar.set(1520)
                 self.relwidth_side_bar.set(0.23)
-
-        print(self.left_side_bar.get())
-        print(self.right_side_bar.get())
-        print(self.relwidth_side_bar.get())
 
         # @description: Menu icon
         bars = customtkinter.CTkImage(
