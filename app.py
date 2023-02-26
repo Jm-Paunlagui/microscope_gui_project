@@ -31,14 +31,20 @@ def toggle_left_sidebar_event():
     """
     :description: Toggle left sidebar, which contains the microscope functions.
     :return:
+    Device resolution list:
+        MacBook Air—1280×832—x=-500.
+        MacBook Pro—1512×982—x=-560.
+        MacBook Pro—1728×1117—x=-620.
+        Desktop—1920×1080—x=-680.
     """
     global left_side_bar_state
     if left_side_bar_state is True:
-        app.left_side_bar_frame.place(x=-560, y=60, relwidth=0.32, relheight=0.89)
+        app.left_side_bar_frame.place(x=app.left_side_bar.get(), y=60,
+                                      relwidth=app.relwidth_side_bar.get(), relheight=0.89)
         app.update()
         left_side_bar_state = False
     else:
-        app.left_side_bar_frame.place(x=0, y=60, relwidth=0.32, relheight=0.89)
+        app.left_side_bar_frame.place(x=0, y=60, relwidth=app.relwidth_side_bar.get(), relheight=0.89)
         app.update()
         app.left_side_bar_frame.lift()
         left_side_bar_state = True
@@ -48,14 +54,22 @@ def toggle_right_sidebar_event():
     """
     :description: Toggle right sidebar, which contains the settings functions.
     :return:
+
+    Device resolution list:
+        MacBook Air—1280×832—x=880.
+        MacBook Pro—1512×982—x=1112.
+        MacBook Pro—1728×1117—x=1344.
+        Desktop—1920×1080—x=1576.
     """
     global right_side_bar_state
     if right_side_bar_state is None or right_side_bar_state is True:
-        app.right_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.89)
+        app.right_side_bar_frame.place(x=app.left_side_bar.get(), y=60,
+                                       relwidth=0.26, relheight=0.89)
         app.update()
         right_side_bar_state = False
     else:
-        app.right_side_bar_frame.place(x=1112, y=60, relwidth=0.34, relheight=0.89)
+        app.right_side_bar_frame.place(x=app.right_side_bar.get(), y=60,
+                                       relwidth=app.relwidth_side_bar.get(), relheight=0.89)
         app.update()
         app.right_side_bar_frame.lift()
         right_side_bar_state = True
@@ -258,10 +272,54 @@ class App(customtkinter.CTk):
         """
         super().__init__()
 
-        # @description: configure window by 1100x580 pixels with title "App title"
+        # @description: Auto detect the screen resolution
         self.title("App title")
-        self.geometry(f"{1512}x{982}")
+        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
         self.configure(fg_color="#d1d5db")
+
+        self.minsize(1280, 832)
+        self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight())
+
+        self.left_side_bar = customtkinter.IntVar()
+        self.right_side_bar = customtkinter.IntVar()
+        self.relwidth_side_bar = customtkinter.DoubleVar()
+
+        match self.winfo_screenwidth():
+            case 1280:
+                self.left_side_bar.set(-500)
+                self.right_side_bar.set(880)
+                self.relwidth_side_bar.set(0.34)
+            case 1366:
+                self.left_side_bar.set(-500)
+                self.right_side_bar.set(975)
+                self.relwidth_side_bar.set(0.32)
+            case 1440:
+                self.left_side_bar.set(-500)
+                self.right_side_bar.set(1000)
+                self.relwidth_side_bar.set(0.32)
+            case 1512:
+                self.left_side_bar.set(-520)
+                self.right_side_bar.set(1100)
+                self.relwidth_side_bar.set(0.30)
+            case 1600:
+                self.left_side_bar.set(-520)
+                self.right_side_bar.set(1200)
+                self.relwidth_side_bar.set(0.28)
+            case 1680:
+                self.left_side_bar.set(-520)
+                self.right_side_bar.set(1290)
+                self.relwidth_side_bar.set(0.26)
+            case 1728:
+                self.left_side_bar.set(-520)
+                self.right_side_bar.set(1325)
+                self.relwidth_side_bar.set(0.28)
+            case 1920:
+                self.left_side_bar.set(-520)
+                self.right_side_bar.set(1520)
+                self.relwidth_side_bar.set(0.23)
+
+        print(self.left_side_bar.get())
+        print(self.right_side_bar.get())
 
         # @description: Menu icon
         bars = customtkinter.CTkImage(
@@ -296,7 +354,7 @@ class App(customtkinter.CTk):
         # self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
         # self.left_side_bar_frame.pack_forget()
         self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
-        self.left_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.89)
+        self.left_side_bar_frame.place(x=-500, y=60, relwidth=0.34, relheight=0.89)
         self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
 
         self.microscope_functions_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Microscope Functions",
