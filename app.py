@@ -479,30 +479,6 @@ class App(customtkinter.CTk):
         # VideoCapture here:
         self.cap = cv2.VideoCapture(0)
 
-        # Set the time limit to 30 seconds
-        self.time_limit = 30
-
-        # Initialize the last frame time and the hover flag
-        self.last_frame_time = time.time()
-
-        # @description: Camera image update function
-        def update_image():
-            ret, frame = self.cap.read()
-            if ret:
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                width = self.camera_canvas.winfo_width()
-                height = self.camera_canvas.winfo_height()
-                if width > 1 and height > 1:
-                    frame = cv2.resize(frame, (width, height))
-                    frame = cv2.flip(frame, 1)
-                    frame = Image.fromarray(frame)
-                    frame = ImageTk.PhotoImage(frame)
-                    self.camera_canvas.create_image(0, 0, image=frame, anchor="nw")
-                    self.camera_canvas.image = frame
-            else:
-                inactive_camera()
-            self.camera_canvas.after(1, update_image)
-
         def inactive_camera():
             self.cap.release()
             self.camera_canvas.destroy()
@@ -514,7 +490,6 @@ class App(customtkinter.CTk):
             self.inactive_camera_label.place(relx=0.5, rely=0.5, anchor="center")
 
         # @description: Update the image
-        # update_image()
         inactive_camera()
 
 
