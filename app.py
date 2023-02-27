@@ -264,7 +264,10 @@ class App(customtkinter.CTk):
 
         # @description: Auto detect the screen resolution
         self.title("App title")
-        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
+        self.iconbitmap("assets/icons/sample_icon.ico")
+        x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
+        y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
+        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+{int(x)}+{int(y)}")
         self.configure(fg_color="#d1d5db")
 
         self.minsize(self.winfo_screenwidth(), self.winfo_screenheight())
