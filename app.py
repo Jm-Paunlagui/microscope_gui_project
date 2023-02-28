@@ -389,15 +389,15 @@ class App(customtkinter.CTk):
         self.fine_focus_label.grid(row=10, column=0, padx=20, pady=0)
 
         objective_options_lists = [
-            "Option 1.1", "Option 2.1", "Option 3.1", "Option 4.1", "Option 5.1", "Option 6.1",
+            "Option 1.1", "Option 2.1", "Option 3.1", "Option 4.1", "Option 5.1", "Option 6.1"
         ]
 
         condenser_options_lists = [
-            "Option 1.2", "Option 2.2", "Option 3.2", "Option 4.2", "Option 5.2", "Option 6.2",
+            "Option 1.2", "Option 2.2", "Option 3.2", "Option 4.2", "Option 5.2", "Option 6.2"
         ]
 
         reflector_options_lists = [
-            "Option 1.3", "Option 2.3", "Option 3.3", "Option 4.3", "Option 5.3",
+            "Option 1.3", "Option 2.3", "Option 3.3", "Option 4.3", "Option 5.3"
         ]
 
         side_port_options_lists = [
