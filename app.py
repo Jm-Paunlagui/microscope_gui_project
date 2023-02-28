@@ -1,3 +1,4 @@
+import platform
 import time
 from typing import Union, Callable
 from tkinter import messagebox
@@ -264,10 +265,16 @@ class App(customtkinter.CTk):
 
         # @description: Auto detect the screen resolution
         self.title("App title")
-        self.iconbitmap("assets/icons/sample_icon.ico")
-        x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
-        y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
-        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+{int(x)}+{int(y)}")
+
+        if platform.system() == "Windows":
+            self.iconbitmap("assets/icons/sample_icon.ico")
+        else:
+            self.iconphoto(True, Image.open("assets/icons/sample_icon.png"))
+
+        # x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
+        # y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
+        self.attributes("-fullscreen", True)
+        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
         self.configure(fg_color="#d1d5db")
 
         self.minsize(self.winfo_screenwidth(), self.winfo_screenheight())
@@ -542,14 +549,44 @@ class App(customtkinter.CTk):
         # @description: Update the image
         inactive_camera()
 
+        # @description: Keyboard bindings start here
+        # def escape_event():
+        #     self.bind("<Escape>", lambda e: self.left_side_bar_frame.place(x=self.left_side_bar.get(), y=60,
+        #                                                                    relwidth=self.relwidth_side_bar.get(),
+        #                                                                    relheight=0.89) or
+        #                                     self.right_side_bar_frame.place(x=self.left_side_bar.get(), y=60,
+        #                                                                     relwidth=self.relwidth_side_bar.get(),
+        #                                                                     relheight=0.89))
+        #
+        # # @description: Shows the Left sidebar when Ctrl + L is pressed
+        # def control_event_l():
+        #     self.bind("<Control-l>", lambda e: self.left_side_bar_frame.place(x=0, y=60,
+        #                                                                       relwidth=self.relwidth_side_bar.get(),
+        #                                                                       relheight=0.89))
+        #
+        # # @description: Shows the Right sidebar when Ctrl + R is pressed
+        # def control_event_r():
+        #     self.bind("<Control-r>", lambda e: self.right_side_bar_frame.place(x=self.right_side_bar.get(), y=60,
+        #                                                                        relwidth=app.relwidth_side_bar.get(),
+        #                                                                        relheight=0.89))
+        #
+        # self.after(0, escape_event)
+        # self.after(0, control_event_l)
+        # self.after(0, control_event_r)
+
 
 if __name__ == "__main__":
     app = App()
-    # @description: Hides the sidebar when escape is pressed
-    app.bind("<Escape>", lambda e: app.left_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.9) or
-                                   app.right_side_bar_frame.place(x=-560, y=60, relwidth=0.34, relheight=0.9))
-    # @description: Shows the Left sidebar when F1 is pressed
-    app.bind("<F1>", lambda e: app.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y))
-    # @description: Shows the Right sidebar when F2 is pressed
-    app.bind("<F2>", lambda e: app.right_side_bar_frame.pack(side=customtkinter.RIGHT, fill=customtkinter.Y))
+    app.bind("<Escape>", lambda e: app.left_side_bar_frame.place(x=app.left_side_bar.get(), y=60,
+                                                                 relwidth=app.relwidth_side_bar.get(),
+                                                                 relheight=0.89) or
+                                   app.right_side_bar_frame.place(x=app.left_side_bar.get(), y=60,
+                                                                  relwidth=app.relwidth_side_bar.get(),
+                                                                  relheight=0.89))
+    app.bind("<Control-l>", lambda e: app.left_side_bar_frame.place(x=0, y=60,
+                                                                    relwidth=app.relwidth_side_bar.get(),
+                                                                    relheight=0.89))
+    app.bind("<Control-r>", lambda e: app.right_side_bar_frame.place(x=app.right_side_bar.get(), y=60,
+                                                                     relwidth=app.relwidth_side_bar.get(),
+                                                                     relheight=0.89))
     app.mainloop()
