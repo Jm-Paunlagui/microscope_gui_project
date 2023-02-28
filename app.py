@@ -273,7 +273,7 @@ class App(customtkinter.CTk):
 
         # x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
         # y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
-        self.attributes("-fullscreen", True)
+        # self.attributes("-fullscreen", True)
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
         self.configure(fg_color="#d1d5db")
 
