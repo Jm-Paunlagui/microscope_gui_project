@@ -123,7 +123,7 @@ def message_box_test_event():
     messagebox.showinfo("Sample", "This is a sample message box.")
 
 
-class FloatSpinbox(customtkinter.CTkFrame):
+class Spinbox(customtkinter.CTkFrame):
     """
     :description: A spinbox with float values.
 
@@ -149,11 +149,11 @@ class FloatSpinbox(customtkinter.CTkFrame):
     """
 
     def __init__(self, *args,
-                 width: Union[int, float] = 100,
-                 height: Union[int, float] = 30,
-                 step_size: Union[int, float] = 1,
-                 min_value: Union[int, float] = None,
-                 max_value: Union[int, float] = None,
+                 width: int = 100,
+                 height: int = 30,
+                 step_size: int = 1,
+                 min_value: int = None,
+                 max_value: int = None,
                  command: Callable = None,
                  **kwargs):
         super().__init__(*args, width=width, height=height, **kwargs)
@@ -179,7 +179,7 @@ class FloatSpinbox(customtkinter.CTkFrame):
         self.add_button.grid(row=0, column=2, padx=(0, 3), pady=3)
 
         # default value
-        self.entry.insert(0, "0.0")
+        self.entry.insert(0, "0")
 
     def add_button_callback(self):
         """
@@ -191,12 +191,12 @@ class FloatSpinbox(customtkinter.CTkFrame):
         if self.command is not None:
             self.command()
         try:
-            value = float(self.entry.get()) + self.step_size
+            value = int(self.entry.get()) + self.step_size
             if value > self.max_value:
                 value = self.max_value
             self.entry.delete(0, "end")
             self.entry.insert(0, value if value >= 0 else 0)
-            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get()}")
+            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
             if app.condenser_diaphragm_options.get() is not None:
                 app.status_cam.configure(
                     text=f"Condenser : {app.condenser_diaphragm_options.get()}")
@@ -213,19 +213,19 @@ class FloatSpinbox(customtkinter.CTkFrame):
         if self.command is not None:
             self.command()
         try:
-            value = float(self.entry.get()) - self.step_size
+            value = int(self.entry.get()) - self.step_size
             if value < self.min_value:
                 value = self.min_value
             self.entry.delete(0, "end")
             self.entry.insert(0, value if value <= self.max_value else self.max_value)
-            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get()}")
+            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
             if app.condenser_diaphragm_options.get() is not None:
                 app.status_cam.configure(
                     text=f"Condenser : {app.condenser_diaphragm_options.get()}")
         except ValueError:
             return
 
-    def get(self) -> Union[float, None]:
+    def get(self) -> Union[int, None]:
         """
         :description: Get the current value.
         If the value is not a float, None is returned.
@@ -233,18 +233,18 @@ class FloatSpinbox(customtkinter.CTkFrame):
         :return: The current value.
         """
         try:
-            return float(self.entry.get())
+            return int(self.entry.get())
         except ValueError:
             return None
 
-    def set(self, value: float):
+    def set(self, value: int):
         """
         :description: Set a new value.
         :param value:
         :return:
         """
         self.entry.delete(0, "end")
-        self.entry.insert(0, str(float(value)))
+        self.entry.insert(0, str(int(value)))
 
 
 class App(customtkinter.CTk):
@@ -431,20 +431,20 @@ class App(customtkinter.CTk):
         # default value for segmented button
         self.shutter_options.set("S-Button 2")
         self.shutter_options.grid(row=6, column=1, padx=20, pady=10, sticky=customtkinter.W)
-        self.condenser_diaphragm_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
-                                                        max_value=1400.0)
+        self.condenser_diaphragm_options = Spinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0,
+                                                   max_value=1400)
         self.condenser_diaphragm_options.grid(row=7, column=1, padx=20, pady=10, sticky=customtkinter.W)
-        self.condenser_diaphragm_options.set(700.0)
-        self.coarse_focus_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=100, min_value=0.0,
-                                                 max_value=40000.0)
+        self.condenser_diaphragm_options.set(700)
+        self.coarse_focus_options = Spinbox(self.left_side_bar_frame, width=150, step_size=100, min_value=0,
+                                            max_value=40000)
         self.coarse_focus_options.grid(row=9, column=1, padx=20, pady=10, sticky=customtkinter.W)
-        self.coarse_focus_options.set(20000.0)
-        self.fine_focus_options = FloatSpinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0.0,
-                                               max_value=99)
+        self.coarse_focus_options.set(20000)
+        self.fine_focus_options = Spinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0,
+                                          max_value=99)
         self.fine_focus_options.grid(row=10, column=1, padx=20, pady=10, sticky=customtkinter.W)
-        self.fine_focus_options.set(50.0)
+        self.fine_focus_options.set(50)
         self.z_drive_config = customtkinter.CTkLabel(
-            self.left_side_bar_frame, text=f"{self.coarse_focus_options.get() + self.fine_focus_options.get()}",
+            self.left_side_bar_frame, text=f"{self.coarse_focus_options.get() + self.fine_focus_options.get():,}",
             fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8,
             text_color="#3b82f6", )
         self.z_drive_config.grid(row=8, column=1, padx=20, pady=10, sticky=customtkinter.W)
@@ -476,11 +476,11 @@ class App(customtkinter.CTk):
                                                           font=("Helvetica", 14), corner_radius=8,
                                                           command=awb_test_event)
         self.auto_white_balance.grid(row=1, column=1, sticky=customtkinter.W, padx=14, pady=14)
-        self.sharpness_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=9.0)
+        self.sharpness_level = Spinbox(self.right_side_bar_frame, step_size=1, min_value=0, max_value=9)
         self.sharpness_level.grid(row=2, column=1, sticky=customtkinter.W, padx=14, pady=14)
-        self.contrast_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
+        self.contrast_level = Spinbox(self.right_side_bar_frame, step_size=1, min_value=0, max_value=100)
         self.contrast_level.grid(row=3, column=1, sticky=customtkinter.W, padx=14, pady=14)
-        self.brightness_level = FloatSpinbox(self.right_side_bar_frame, step_size=1, min_value=0.0, max_value=100.0)
+        self.brightness_level = Spinbox(self.right_side_bar_frame, step_size=1, min_value=0, max_value=100)
         self.brightness_level.grid(row=4, column=1, sticky=customtkinter.W, padx=14, pady=14)
         self.camera_functions_label = customtkinter.CTkLabel(self.right_side_bar_frame, text="Camera Functions",
                                                              font=customtkinter.CTkFont("Helvetica", 20, "bold"))
