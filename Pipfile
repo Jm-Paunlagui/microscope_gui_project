@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+customtkinter = "==5.1.2"
+opencv-python = "==4.7.0.68"
+pillow = "==9.4.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
