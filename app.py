@@ -521,8 +521,8 @@ class App(customtkinter.CTk):
         self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=54)
         self.status_bar_frame.pack(fill=customtkinter.X, side=customtkinter.BOTTOM)
 
-        self.status_cam = customtkinter.CTkLabel(self.status_bar_frame, text="System idle", fg_color="#bfdbfe",
-                                                 font=("Helvetica", 20), corner_radius=8, text_color="#3b82f6", )
+        self.status_cam = customtkinter.CTkLabel(self.status_bar_frame, text="System idle",
+                                                 font=("Helvetica", 20), corner_radius=8)
         self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
         # @description: Status bar frame ends here
 
