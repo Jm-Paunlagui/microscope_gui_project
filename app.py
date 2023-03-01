@@ -269,16 +269,18 @@ class App(customtkinter.CTk):
         if platform.system() == "Windows":
             self.iconbitmap("assets/icons/sample_icon.ico")
         else:
-            self.iconphoto(True, Image.open("assets/icons/sample_icon.png"))
+            image = Image.open("assets/icons/sample_icon.png")
+            photo = ImageTk.PhotoImage(image)
+            self.iconphoto(True, photo)
 
         # x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
         # y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
         # self.attributes("-fullscreen", True)
-        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}")
+        self.geometry(f"{self.winfo_screenwidth()}x{900}")
         self.configure(fg_color="#d1d5db")
 
-        self.minsize(self.winfo_screenwidth(), self.winfo_screenheight())
-        self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight())
+        # self.minsize(self.winfo_screenwidth(), self.winfo_screenheight())
+        # self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight())
 
         self.left_side_bar = customtkinter.IntVar()
         self.right_side_bar = customtkinter.IntVar()
