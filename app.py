@@ -343,8 +343,9 @@ class App(customtkinter.CTk):
                                                        fg_color="white", corner_radius=8, hover_color="white",
                                                        text_color="white", command=toggle_right_sidebar_event)
         self.settings_button.pack(side=customtkinter.RIGHT, padx=8, pady=14)
-        self.top_bar_title = customtkinter.CTkLabel(self.top_bar_frame, text="App title",
-                                                    font=("Helvetica", 20, "bold"), text_color="black")
+        self.top_bar_title = customtkinter.CTkLabel(
+            self.top_bar_frame, text="App title", font=("Helvetica", 20, "bold"), text_color="black",
+            anchor=customtkinter.SW)
         self.top_bar_title.pack(side=customtkinter.LEFT, padx=0, pady=14)
         # @description: Top bar frame ends here
 
@@ -451,7 +452,7 @@ class App(customtkinter.CTk):
         self.fine_focus_options.set(50)
         self.z_drive_config = customtkinter.CTkLabel(
             self.left_side_bar_frame, text=f"{self.coarse_focus_options.get() + self.fine_focus_options.get():,}",
-            fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8, width=150, anchor=customtkinter.W,
+            fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8, width=150, anchor=customtkinter.SW,
             text_color="#3b82f6")
         self.z_drive_config.grid(row=8, column=1, padx=20, pady=10, sticky=customtkinter.W)
         # @description: Left sidebar frame ends here
@@ -528,9 +529,42 @@ class App(customtkinter.CTk):
         self.status_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white", height=54)
         self.status_bar_frame.pack(fill=customtkinter.X, side=customtkinter.BOTTOM)
 
-        self.status_cam = customtkinter.CTkLabel(self.status_bar_frame, text="System idle",
-                                                 font=("Helvetica", 20), corner_radius=8)
-        self.status_cam.pack(side=customtkinter.LEFT, padx=14, pady=14)
+        self.status_objective_option = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Objective: {self.objective_options.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_objective_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_condenser_option = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Condenser: {self.condenser_options.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_condenser_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_reflection_option = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Reflection: {self.reflector_options.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_reflection_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_side_port_option = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Side Port: {self.side_port.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_side_port_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_tube_lens_option = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Tube Lens: {self.tube_lens_options.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_tube_lens_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_shutter_option = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Shutter: {self.shutter_options.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_shutter_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_condenser_diaphragm_value = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Condenser Diaphragm: {self.condenser_diaphragm_options.get()}",
+            font=("Helvetica", 14), corner_radius=8)
+        self.status_condenser_diaphragm_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_coarse_focus_value = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Coarse Focus: {self.coarse_focus_options.get()}",
+            font=("Helvetica", 14), corner_radius=8)
+        self.status_coarse_focus_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_fine_focus_value = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Fine Focus: {self.fine_focus_options.get()}", font=("Helvetica", 14),
+            corner_radius=8)
+        self.status_fine_focus_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
         # @description: Status bar frame ends here
 
         # @description: Main frame starts here
