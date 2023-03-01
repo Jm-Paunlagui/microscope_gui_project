@@ -8,6 +8,7 @@ from PIL import Image, ImageTk
 
 customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
+all_width = 150
 
 
 def test_event(option):
@@ -149,7 +150,7 @@ class Spinbox(customtkinter.CTkFrame):
     """
 
     def __init__(self, *args,
-                 width: int = 100,
+                 width: int = 150,
                  height: int = 30,
                  step_size: int = 1,
                  min_value: int = None,
@@ -163,7 +164,7 @@ class Spinbox(customtkinter.CTkFrame):
         self.step_size = step_size
         self.command = command
 
-        self.configure(fg_color=("gray78", "gray28"))  # set frame color
+        self.configure(fg_color=("gray78", "gray28"), corner_radius=8)  # set frame color
 
         self.grid_columnconfigure(1, weight=1)  # entry expands
 
@@ -411,23 +412,28 @@ class App(customtkinter.CTk):
         ]
 
         self.objective_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=objective_options_lists, command=test_event)
+            self.left_side_bar_frame, values=objective_options_lists, command=test_event, width=all_width,
+            corner_radius=8)
         self.objective_options.grid(row=1, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=condenser_options_lists, command=test_event)
+            self.left_side_bar_frame, values=condenser_options_lists, command=test_event, width=all_width,
+            corner_radius=8)
         self.condenser_options.grid(row=2, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.reflector_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=reflector_options_lists, command=test_event)
+            self.left_side_bar_frame, values=reflector_options_lists, command=test_event, width=all_width,
+            corner_radius=8)
         self.reflector_options.grid(row=3, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.side_port = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=side_port_options_lists, command=test_event)
+            self.left_side_bar_frame, values=side_port_options_lists, command=test_event, width=all_width,
+            corner_radius=8)
         self.side_port.grid(row=4, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.tube_lens_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=tube_lens_options_lists, command=test_event)
+            self.left_side_bar_frame, values=tube_lens_options_lists, command=test_event, width=all_width,
+            corner_radius=8)
         self.tube_lens_options.grid(row=5, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.shutter_options = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
                                                                 values=["S-Button 1", "S-Button 2"],
-                                                                command=test_event)
+                                                                command=test_event, width=all_width, corner_radius=8)
         # default value for segmented button
         self.shutter_options.set("S-Button 2")
         self.shutter_options.grid(row=6, column=1, padx=20, pady=10, sticky=customtkinter.W)
@@ -445,8 +451,8 @@ class App(customtkinter.CTk):
         self.fine_focus_options.set(50)
         self.z_drive_config = customtkinter.CTkLabel(
             self.left_side_bar_frame, text=f"{self.coarse_focus_options.get() + self.fine_focus_options.get():,}",
-            fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8,
-            text_color="#3b82f6", )
+            fg_color="#bfdbfe", font=("Helvetica", 20), corner_radius=8, width=150, anchor=customtkinter.W,
+            text_color="#3b82f6")
         self.z_drive_config.grid(row=8, column=1, padx=20, pady=10, sticky=customtkinter.W)
         # @description: Left sidebar frame ends here
 
@@ -474,7 +480,7 @@ class App(customtkinter.CTk):
 
         self.auto_white_balance = customtkinter.CTkButton(self.right_side_bar_frame, text="Auto",
                                                           font=("Helvetica", 14), corner_radius=8,
-                                                          command=awb_test_event)
+                                                          command=awb_test_event, width=all_width)
         self.auto_white_balance.grid(row=1, column=1, sticky=customtkinter.W, padx=14, pady=14)
         self.sharpness_level = Spinbox(self.right_side_bar_frame, step_size=1, min_value=0, max_value=9)
         self.sharpness_level.grid(row=2, column=1, sticky=customtkinter.W, padx=14, pady=14)
@@ -499,20 +505,21 @@ class App(customtkinter.CTk):
         self.button_4_label.grid(row=9, column=0, padx=20, pady=0, sticky=customtkinter.W)
         self.live_capture_button = customtkinter.CTkButton(self.right_side_bar_frame, text="OFF", fg_color="#3b82f6",
                                                            corner_radius=8, text_color="white", font=("Helvetica", 14),
-                                                           command=live_capture_test_event)
+                                                           command=live_capture_test_event, width=all_width)
         self.live_capture_button.grid(row=6, column=1, padx=20, pady=14, sticky=customtkinter.W)
         self.capture_snapshot_button = customtkinter.CTkButton(self.right_side_bar_frame, text="Capture",
                                                                fg_color="#3b82f6", corner_radius=8, text_color="white",
-                                                               font=("Helvetica", 14), command=capture_test_event)
+                                                               font=("Helvetica", 14), command=capture_test_event,
+                                                               width=all_width)
         self.capture_snapshot_button.grid(row=7, column=1, padx=20, pady=14, sticky=customtkinter.W)
         self.button_3 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 3", fg_color="#3b82f6",
                                                 corner_radius=8, hover_color=None, text_color="white",
-                                                font=("Helvetica", 14), command=message_box_test_event)
+                                                font=("Helvetica", 14), command=message_box_test_event, width=all_width)
         self.button_3.grid(row=8, column=1, padx=20, pady=14, sticky=customtkinter.W)
         self.button_4 = customtkinter.CTkButton(self.right_side_bar_frame, text="Button 4", fg_color="#3b82f6",
                                                 corner_radius=8, hover_color=None,
                                                 text_color="white", font=("Helvetica", 14),
-                                                command=message_box_test_event)
+                                                command=message_box_test_event, width=all_width)
         self.button_4.grid(row=9, column=1, padx=20, pady=14, sticky=customtkinter.W)
 
         # @description: Right sidebar frame ends here
