@@ -10,19 +10,51 @@ customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
 all_width = 150
 
+# app.status_objective_option
+# app.status_condenser_option
+# app.status_reflection_option
+# app.status_side_port_option
+# app.status_tube_lens_option
+# app.status_shutter_option
+# app.status_condenser_diaphragm_value
+# app.status_coarse_focus_value
+# app.status_fine_focus_value
 
-def test_event(option):
-    """
-    :description: Only the last option will be displayed in the status bar.
 
-    To be more specific, you can statically define, which status text should be displayed for each option.
-    For example:
-        def objective_event(option):
-            app.status_cam.configure(text="Objective: " + option + " selected")
-    :param option:
-    :return:
-    """
-    app.status_cam.configure(text=option + " selected")
+def test_event_status_objective_option(option):
+    app.status_objective_option.configure(text=f"Objective: {option}")
+
+
+def test_event_status_condenser_option(option):
+    app.status_condenser_option.configure(text=f"Condenser: {option}")
+
+
+def test_event_status_reflection_option(option):
+    app.status_reflection_option.configure(text=f"Reflection: {option}")
+
+
+def test_event_status_side_port_option(option):
+    app.status_side_port_option.configure(text=f"Side Port: {option}")
+
+
+def test_event_status_tube_lens_option(option):
+    app.status_tube_lens_option.configure(text=f"Tube Lens: {option}")
+
+
+def test_event_status_shutter_option(option):
+    app.status_shutter_option.configure(text=f"Shutter: {option}")
+
+
+def test_event_status_condenser_diaphragm_value(option):
+    app.status_condenser_diaphragm_value.configure(text=f"Condenser Diaphragm: {option}")
+
+
+def test_event_status_coarse_focus_value(option):
+    app.status_coarse_focus_value.configure(text=f"Coarse Focus: {option}")
+
+
+def test_event_status_fine_focus_value(option):
+    app.objective_options.configure(text=f"Fine Focus: {option}")
 
 
 # Initial state of the sidebars
@@ -413,28 +445,28 @@ class App(customtkinter.CTk):
         ]
 
         self.objective_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=objective_options_lists, command=test_event, width=all_width,
-            corner_radius=8)
+            self.left_side_bar_frame, values=objective_options_lists, command=test_event_status_objective_option,
+            width=all_width, corner_radius=8)
         self.objective_options.grid(row=1, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=condenser_options_lists, command=test_event, width=all_width,
-            corner_radius=8)
+            self.left_side_bar_frame, values=condenser_options_lists, command=test_event_status_condenser_option,
+            width=all_width, corner_radius=8)
         self.condenser_options.grid(row=2, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.reflector_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=reflector_options_lists, command=test_event, width=all_width,
-            corner_radius=8)
+            self.left_side_bar_frame, values=reflector_options_lists, command=test_event_status_reflection_option,
+            width=all_width, corner_radius=8)
         self.reflector_options.grid(row=3, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.side_port = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=side_port_options_lists, command=test_event, width=all_width,
-            corner_radius=8)
+            self.left_side_bar_frame, values=side_port_options_lists, command=test_event_status_side_port_option,
+            width=all_width, corner_radius=8)
         self.side_port.grid(row=4, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.tube_lens_options = customtkinter.CTkOptionMenu(
-            self.left_side_bar_frame, values=tube_lens_options_lists, command=test_event, width=all_width,
-            corner_radius=8)
+            self.left_side_bar_frame, values=tube_lens_options_lists, command=test_event_status_tube_lens_option,
+            width=all_width, corner_radius=8)
         self.tube_lens_options.grid(row=5, column=1, padx=20, pady=10, sticky=customtkinter.W)
-        self.shutter_options = customtkinter.CTkSegmentedButton(self.left_side_bar_frame,
-                                                                values=["S-Button 1", "S-Button 2"],
-                                                                command=test_event, width=all_width, corner_radius=8)
+        self.shutter_options = customtkinter.CTkSegmentedButton(
+            self.left_side_bar_frame, values=["S-Button 1", "S-Button 2"], command=test_event_status_shutter_option,
+            width=all_width, corner_radius=8)
         # default value for segmented button
         self.shutter_options.set("S-Button 2")
         self.shutter_options.grid(row=6, column=1, padx=20, pady=10, sticky=customtkinter.W)
