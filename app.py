@@ -1,3 +1,4 @@
+import locale
 import platform
 import time
 from typing import Union, Callable
@@ -156,6 +157,17 @@ def message_box_test_event():
     messagebox.showinfo("Sample", "This is a sample message box.")
 
 
+def status_setter():
+    app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
+    if app.condenser_diaphragm_options.get() is not None:
+        app.status_condenser_diaphragm_value.configure(
+            text=f"Condenser Diaphragm: {app.condenser_diaphragm_options.get():,}")
+    if app.coarse_focus_options.get() is not None:
+        app.status_coarse_focus_value.configure(text=f"Coarse Focus: {app.coarse_focus_options.get():,}")
+    if app.fine_focus_options.get() is not None:
+        app.status_fine_focus_value.configure(text=f"Fine Focus: {app.fine_focus_options.get():,}")
+
+
 class Spinbox(customtkinter.CTkFrame):
     """
     :description: A spinbox with float values.
@@ -224,15 +236,13 @@ class Spinbox(customtkinter.CTkFrame):
         if self.command is not None:
             self.command()
         try:
-            value = int(self.entry.get()) + self.step_size
-            if value > self.max_value:
+            value = int(self.entry.get().replace(',', '')) + self.step_size
+            if self.max_value is not None and value > self.max_value:
                 value = self.max_value
+            value_str = f"{value:,}"
             self.entry.delete(0, "end")
-            self.entry.insert(0, value if value >= 0 else 0)
-            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
-            if app.condenser_diaphragm_options.get() is not None:
-                app.status_cam.configure(
-                    text=f"Condenser : {app.condenser_diaphragm_options.get()}")
+            self.entry.insert(0, value_str)
+            status_setter()
         except ValueError:
             return
 
@@ -246,15 +256,13 @@ class Spinbox(customtkinter.CTkFrame):
         if self.command is not None:
             self.command()
         try:
-            value = int(self.entry.get()) - self.step_size
-            if value < self.min_value:
+            value = int(self.entry.get().replace(',', '')) - self.step_size
+            if self.min_value is not None and value < self.min_value:
                 value = self.min_value
+            value_str = f"{value:,}"
             self.entry.delete(0, "end")
-            self.entry.insert(0, value if value <= self.max_value else self.max_value)
-            app.z_drive_config.configure(text=f"{app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
-            if app.condenser_diaphragm_options.get() is not None:
-                app.status_cam.configure(
-                    text=f"Condenser : {app.condenser_diaphragm_options.get()}")
+            self.entry.insert(0, value_str)
+            status_setter()
         except ValueError:
             return
 
@@ -266,18 +274,19 @@ class Spinbox(customtkinter.CTkFrame):
         :return: The current value.
         """
         try:
-            return int(self.entry.get())
+            return int(self.entry.get().replace(',', ''))
         except ValueError:
             return None
 
     def set(self, value: int):
         """
-        :description: Set a new value.
+        :description: Set a new value with commas.
         :param value:
         :return:
         """
+        value = f"{value:,}"
         self.entry.delete(0, "end")
-        self.entry.insert(0, str(int(value)))
+        self.entry.insert(0, value)
 
 
 class App(customtkinter.CTk):
@@ -586,15 +595,15 @@ class App(customtkinter.CTk):
             corner_radius=8)
         self.status_shutter_option.pack(side=customtkinter.LEFT, padx=2, pady=8)
         self.status_condenser_diaphragm_value = customtkinter.CTkLabel(
-            self.status_bar_frame, text=f"Condenser Diaphragm: {self.condenser_diaphragm_options.get()}",
+            self.status_bar_frame, text=f"Condenser Diaphragm: {self.condenser_diaphragm_options.get():,}",
             font=("Helvetica", 14), corner_radius=8)
         self.status_condenser_diaphragm_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
         self.status_coarse_focus_value = customtkinter.CTkLabel(
-            self.status_bar_frame, text=f"Coarse Focus: {self.coarse_focus_options.get()}",
+            self.status_bar_frame, text=f"Coarse Focus: {self.coarse_focus_options.get():,}",
             font=("Helvetica", 14), corner_radius=8)
         self.status_coarse_focus_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
         self.status_fine_focus_value = customtkinter.CTkLabel(
-            self.status_bar_frame, text=f"Fine Focus: {self.fine_focus_options.get()}", font=("Helvetica", 14),
+            self.status_bar_frame, text=f"Fine Focus: {self.fine_focus_options.get():,}", font=("Helvetica", 14),
             corner_radius=8)
         self.status_fine_focus_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
         # @description: Status bar frame ends here
