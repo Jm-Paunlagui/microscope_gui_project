@@ -46,18 +46,6 @@ def test_event_status_shutter_option(option):
     app.status_shutter_option.configure(text=f"Shutter: {option}")
 
 
-def test_event_status_condenser_diaphragm_value(option):
-    app.status_condenser_diaphragm_value.configure(text=f"Condenser Diaphragm: {option}")
-
-
-def test_event_status_coarse_focus_value(option):
-    app.status_coarse_focus_value.configure(text=f"Coarse Focus: {option}")
-
-
-def test_event_status_fine_focus_value(option):
-    app.objective_options.configure(text=f"Fine Focus: {option}")
-
-
 # Initial state of the sidebars
 left_side_bar_state = False
 right_side_bar_state = False
