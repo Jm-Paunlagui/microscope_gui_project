@@ -296,11 +296,11 @@ class App(customtkinter.CTk):
         # x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
         # y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
         # self.attributes("-fullscreen", True)
-        self.geometry(f"{self.winfo_screenwidth()}x{900}")
+        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight() - 80}+0+0")
         self.configure(fg_color="#d1d5db")
 
-        self.minsize(self.winfo_screenwidth(), 900)
-        self.maxsize(self.winfo_screenwidth(), 900)
+        self.minsize(self.winfo_screenwidth(), self.winfo_screenheight() - 80)
+        self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight() - 80)
 
         self.left_side_bar = customtkinter.IntVar()
         self.right_side_bar = customtkinter.IntVar()
