@@ -11,16 +11,6 @@ customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
 all_width = 150
 
-# app.status_objective_option
-# app.status_condenser_option
-# app.status_reflection_option
-# app.status_side_port_option
-# app.status_tube_lens_option
-# app.status_shutter_option
-# app.status_condenser_diaphragm_value
-# app.status_coarse_focus_value
-# app.status_fine_focus_value
-
 
 def test_event_status_objective_option(option):
     app.status_objective_option.configure(text=f"Objective: {option}")
@@ -309,8 +299,8 @@ class App(customtkinter.CTk):
         self.geometry(f"{self.winfo_screenwidth()}x{900}")
         self.configure(fg_color="#d1d5db")
 
-        # self.minsize(self.winfo_screenwidth(), self.winfo_screenheight())
-        # self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight())
+        self.minsize(self.winfo_screenwidth(), 900)
+        self.maxsize(self.winfo_screenwidth(), 900)
 
         self.left_side_bar = customtkinter.IntVar()
         self.right_side_bar = customtkinter.IntVar()
@@ -380,9 +370,6 @@ class App(customtkinter.CTk):
 
         # @description: Left sidebar frame starts here
         self.left_side_bar_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="white")
-        # self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
-        # self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
-        # self.left_side_bar_frame.pack_forget()
         self.left_side_bar_frame.pack(side=customtkinter.LEFT, fill=customtkinter.Y)
         self.left_side_bar_frame.place(x=-500, y=60, relwidth=0.34, relheight=0.89)
         self.left_side_bar_frame.grid_rowconfigure(15, weight=1)
@@ -620,31 +607,6 @@ class App(customtkinter.CTk):
 
         # @description: Update the image
         inactive_camera()
-
-        # @description: Keyboard bindings start here
-        # def escape_event():
-        #     self.bind("<Escape>", lambda e: self.left_side_bar_frame.place(x=self.left_side_bar.get(), y=60,
-        #                                                                    relwidth=self.relwidth_side_bar.get(),
-        #                                                                    relheight=0.89) or
-        #                                     self.right_side_bar_frame.place(x=self.left_side_bar.get(), y=60,
-        #                                                                     relwidth=self.relwidth_side_bar.get(),
-        #                                                                     relheight=0.89))
-        #
-        # # @description: Shows the Left sidebar when Ctrl + L is pressed
-        # def control_event_l():
-        #     self.bind("<Control-l>", lambda e: self.left_side_bar_frame.place(x=0, y=60,
-        #                                                                       relwidth=self.relwidth_side_bar.get(),
-        #                                                                       relheight=0.89))
-        #
-        # # @description: Shows the Right sidebar when Ctrl + R is pressed
-        # def control_event_r():
-        #     self.bind("<Control-r>", lambda e: self.right_side_bar_frame.place(x=self.right_side_bar.get(), y=60,
-        #                                                                        relwidth=app.relwidth_side_bar.get(),
-        #                                                                        relheight=0.89))
-        #
-        # self.after(0, escape_event)
-        # self.after(0, control_event_l)
-        # self.after(0, control_event_r)
 
 
 if __name__ == "__main__":
