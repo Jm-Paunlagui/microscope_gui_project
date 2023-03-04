@@ -617,10 +617,6 @@ if __name__ == "__main__":
                                    app.right_side_bar_frame.place(x=app.left_side_bar.get(), y=60,
                                                                   relwidth=app.relwidth_side_bar.get(),
                                                                   relheight=0.89))
-    app.bind("<Control-l>", lambda e: app.left_side_bar_frame.place(x=0, y=60,
-                                                                    relwidth=app.relwidth_side_bar.get(),
-                                                                    relheight=0.89))
-    app.bind("<Control-r>", lambda e: app.right_side_bar_frame.place(x=app.right_side_bar.get(), y=60,
-                                                                     relwidth=app.relwidth_side_bar.get(),
-                                                                     relheight=0.89))
+    app.bind("<Control-l>", lambda e: toggle_left_sidebar_event())
+    app.bind("<Control-r>", lambda e: toggle_right_sidebar_event())
     app.mainloop()
