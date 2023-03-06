@@ -140,10 +140,8 @@ def status_setter():
     if app.condenser_diaphragm_options.get() is not None:
         app.status_condenser_diaphragm_value.configure(
             text=f"Condenser Diaphragm: {app.condenser_diaphragm_options.get():,}")
-    if app.coarse_focus_options.get() is not None:
-        app.status_coarse_focus_value.configure(text=f"Coarse Focus: {app.coarse_focus_options.get():,}")
-    if app.fine_focus_options.get() is not None:
-        app.status_fine_focus_value.configure(text=f"Fine Focus: {app.fine_focus_options.get():,}")
+    if app.coarse_focus_options.get() is not None and app.fine_focus_options.get() is not None:
+        app.status_z_drive.configure(text=f"Z - Drive: {app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
 
 
 class Spinbox(customtkinter.CTkFrame):
@@ -398,7 +396,7 @@ class App(customtkinter.CTk):
         self.condenser_diaphragm_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Condenser Diaphragm",
                                                                 font=customtkinter.CTkFont(size=20))
         self.condenser_diaphragm_label.grid(row=7, column=0, padx=20, pady=0, sticky=customtkinter.W)
-        self.z_drive_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Z Drive",
+        self.z_drive_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Z - Drive",
                                                     font=customtkinter.CTkFont(size=20))
         self.z_drive_label.grid(row=8, column=0, padx=20, pady=0, sticky=customtkinter.W)
         self.coarse_focus_label = customtkinter.CTkLabel(self.left_side_bar_frame, text="Coarse Focus",
@@ -573,14 +571,10 @@ class App(customtkinter.CTk):
             self.status_bar_frame, text=f"Condenser Diaphragm: {self.condenser_diaphragm_options.get():,}",
             font=("Helvetica", 14), corner_radius=8)
         self.status_condenser_diaphragm_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
-        self.status_coarse_focus_value = customtkinter.CTkLabel(
-            self.status_bar_frame, text=f"Coarse Focus: {self.coarse_focus_options.get():,}",
+        self.status_z_drive = customtkinter.CTkLabel(
+            self.status_bar_frame, text=f"Z - Drive: {self.coarse_focus_options.get() + self.fine_focus_options.get():,}",
             font=("Helvetica", 14), corner_radius=8)
-        self.status_coarse_focus_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
-        self.status_fine_focus_value = customtkinter.CTkLabel(
-            self.status_bar_frame, text=f"Fine Focus: {self.fine_focus_options.get():,}", font=("Helvetica", 14),
-            corner_radius=8)
-        self.status_fine_focus_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
+        self.status_z_drive.pack(side=customtkinter.LEFT, padx=2, pady=8)
         # @description: Status bar frame ends here
 
         # @description: Main frame starts here
