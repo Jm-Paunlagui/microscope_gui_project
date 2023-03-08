@@ -6,6 +6,7 @@ from tkinter import messagebox
 import customtkinter
 import cv2
 from PIL import Image, ImageTk
+from screeninfo import get_monitors
 
 customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"]
@@ -141,7 +142,8 @@ def status_setter():
         app.status_condenser_diaphragm_value.configure(
             text=f"Condenser Diaphragm: {app.condenser_diaphragm_options.get():,}")
     if app.coarse_focus_options.get() is not None and app.fine_focus_options.get() is not None:
-        app.status_z_drive.configure(text=f"Z - Drive: {app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
+        app.status_z_drive.configure(
+            text=f"Z - Drive: {app.coarse_focus_options.get() + app.fine_focus_options.get():,}")
 
 
 class Spinbox(customtkinter.CTkFrame):
@@ -291,10 +293,12 @@ class App(customtkinter.CTk):
             photo = ImageTk.PhotoImage(image)
             self.iconphoto(True, photo)
 
-        # x = (self.winfo_screenwidth() / 2) - (self.winfo_screenwidth() / 2)
-        # y = (self.winfo_screenheight() / 2) - (self.winfo_screenheight() / 2)
-        # self.attributes("-fullscreen", True)
-        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight() - 80}+0+0")
+        for m in get_monitors():
+            if m.is_primary is True:
+                self.geometry(f"{m.width}x{m.height}+{0}+{0}")
+                break
+
+        # self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight() - 80}+0+0")
         self.configure(fg_color="#d1d5db")
 
         self.minsize(self.winfo_screenwidth(), self.winfo_screenheight() - 80)
@@ -572,7 +576,8 @@ class App(customtkinter.CTk):
             font=("Helvetica", 14), corner_radius=8)
         self.status_condenser_diaphragm_value.pack(side=customtkinter.LEFT, padx=2, pady=8)
         self.status_z_drive = customtkinter.CTkLabel(
-            self.status_bar_frame, text=f"Z - Drive: {self.coarse_focus_options.get() + self.fine_focus_options.get():,}",
+            self.status_bar_frame,
+            text=f"Z - Drive: {self.coarse_focus_options.get() + self.fine_focus_options.get():,}",
             font=("Helvetica", 14), corner_radius=8)
         self.status_z_drive.pack(side=customtkinter.LEFT, padx=2, pady=8)
         # @description: Status bar frame ends here
