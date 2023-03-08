@@ -293,22 +293,23 @@ class App(customtkinter.CTk):
             photo = ImageTk.PhotoImage(image)
             self.iconphoto(True, photo)
 
-        for m in get_monitors():
-            if m.is_primary is True:
-                self.geometry(f"{m.width}x{m.height}+{0}+{0}")
+        for lm in get_monitors():
+            if lm.is_primary is True:
+                self.geometry(f"{lm.width}x{lm.height - 80}+{0}+{0}")
+                self.primary_monitor_width = lm.width
+                self.primary_monitor_height = lm.height
                 break
 
-        # self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight() - 80}+0+0")
         self.configure(fg_color="#d1d5db")
 
-        self.minsize(self.winfo_screenwidth(), self.winfo_screenheight() - 80)
-        self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight() - 80)
+        self.minsize(self.primary_monitor_width, self.primary_monitor_height - 80)
+        self.maxsize(self.primary_monitor_width, self.primary_monitor_height - 80)
 
         self.left_side_bar = customtkinter.IntVar()
         self.right_side_bar = customtkinter.IntVar()
         self.relwidth_side_bar = customtkinter.DoubleVar()
 
-        match self.winfo_screenwidth():
+        match self.primary_monitor_width:
             case 1280:
                 self.left_side_bar.set(-500)
                 self.right_side_bar.set(880)
