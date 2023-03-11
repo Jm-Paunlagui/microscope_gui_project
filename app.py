@@ -431,31 +431,36 @@ class App(customtkinter.CTk):
             "Option 1.5", "Option 2.5", "Option 3.5"
         ]
 
+        self.objective_option_initial_value = customtkinter.StringVar(value=objective_options_lists[0])
+        self.condenser_option_initial_value = customtkinter.StringVar(value=condenser_options_lists[0])
+        self.reflector_option_initial_value = customtkinter.StringVar(value=reflector_options_lists[0])
+        self.side_port_option_initial_value = customtkinter.StringVar(value=side_port_options_lists[0])
+        self.tube_lens_option_initial_value = customtkinter.StringVar(value=tube_lens_options_lists[0])
+        self.shutter_option_initial_value = customtkinter.StringVar(value="S-Button 2")
+
         self.objective_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=objective_options_lists, command=test_event_status_objective_option,
-            width=all_width, corner_radius=8)
+            width=all_width, corner_radius=8, variable=self.objective_option_initial_value)
         self.objective_options.grid(row=1, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=condenser_options_lists, command=test_event_status_condenser_option,
-            width=all_width, corner_radius=8)
+            width=all_width, corner_radius=8, variable=self.condenser_option_initial_value)
         self.condenser_options.grid(row=2, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.reflector_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=reflector_options_lists, command=test_event_status_reflection_option,
-            width=all_width, corner_radius=8)
+            width=all_width, corner_radius=8, variable=self.reflector_option_initial_value)
         self.reflector_options.grid(row=3, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.side_port = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=side_port_options_lists, command=test_event_status_side_port_option,
-            width=all_width, corner_radius=8)
+            width=all_width, corner_radius=8, variable=self.side_port_option_initial_value)
         self.side_port.grid(row=4, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.tube_lens_options = customtkinter.CTkOptionMenu(
             self.left_side_bar_frame, values=tube_lens_options_lists, command=test_event_status_tube_lens_option,
-            width=all_width, corner_radius=8)
+            width=all_width, corner_radius=8, variable=self.tube_lens_option_initial_value)
         self.tube_lens_options.grid(row=5, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.shutter_options = customtkinter.CTkSegmentedButton(
             self.left_side_bar_frame, values=["S-Button 1", "S-Button 2"], command=test_event_status_shutter_option,
-            width=all_width, corner_radius=8)
-        # default value for segmented button
-        self.shutter_options.set("S-Button 2")
+            width=all_width, corner_radius=8, variable=self.shutter_option_initial_value)
         self.shutter_options.grid(row=6, column=1, padx=20, pady=10, sticky=customtkinter.W)
         self.condenser_diaphragm_options = Spinbox(self.left_side_bar_frame, width=150, step_size=1, min_value=0,
                                                    max_value=1400)
